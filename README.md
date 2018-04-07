@@ -40,15 +40,11 @@ Locally:
 app.config['SQLALCHEMY_DATABASE_URI'] =  '<database_url>'
 ~~~~
 
-Initialize the database: 
+Initialize, migrate and upgrade the database: 
 
 `$ python manage.py db init`
 
-Migrate the database:
-
 `$ python manage.py db migrate`
-
-Upgrade the database: 
 
 `$ python manage.py db upgrade`
 
