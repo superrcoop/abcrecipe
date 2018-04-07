@@ -18,11 +18,20 @@ def index():
     error = None
     return render_template('index.html',error=error)
 
-@app.route("/home")
-def home():
+@app.route("/recipe_detail")
+def recipe_detail():
     error = None
-    return render_template('home.html',error=error)
+    return render_template('recipe_detail.html',error=error)
 
+@app.route("/browse_recipe")
+def browse_recipe():
+    error = None
+    return render_template('browse_recipe.html',error=error)
+
+@app.route("/contact-us")
+def contact():
+    error = None
+    return render_template('contact.html',error=error)
 
 @app.route("/login",methods=['POST', 'GET'])
 def login():

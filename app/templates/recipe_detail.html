@@ -37,10 +37,10 @@
       </button>
       <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
         <ul class="navbar-nav">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" href={{url_for('index')}}>Home</a>
           </li>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown active">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
                 Recipes
@@ -69,162 +69,126 @@
     </div>
   </nav>
 
-  <!-- Top Recipes -->
-  <div class="top">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4">
-          <h5><i class="fa fa-cutlery" aria-hidden="true"></i> Top Breakfast Recipes</h5>
-          <div class="box clearfix">
-            <a href="{{url_for('recipe_detail')}}">
-              <img src="{{ url_for('static', filename='../static/images/square-recipes1.jpg') }}" alt="">
-            <h3>Cinnamon Baked Doughnuts</h3>
-            <p>Lorem ipsum dolor sit amet, adipiscing elit...</p>
-          </a>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <h5><i class="fa fa-cutlery" aria-hidden="true"></i> Top Lunch Recipes</h5>
-          <div class="box clearfix">
-            <a href="{{url_for('recipe_detail')}}">
-              <img src="{{ url_for('static', filename='../static/images/square-recipes2.jpg')}}" alt="">
-            <h3>Fruit Mix With Lemon Gravy</h3>
-            <p>Lorem ipsum dolor sit amet, adipiscing elit...</p>
-          </a>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <h5><i class="fa fa-cutlery" aria-hidden="true"></i> Top Dinner Recipes</h5>
-          <div class="box clearfix">
-            <a href="{{url_for('recipe_detail')}}">
-              <img src="{{ url_for('static', filename='../static/images/square-recipes3.jpg')}}" alt="">
-            
-            <h3>Red Cilly Sauce Cheese</h3>
-            <p>Lorem ipsum dolor sit amet, adipiscing elit...</p>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Featured Recipes-->
-  <div class="featured">
+  <!-- Detail Recipes-->
+  <div class="recipe-detail">
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-lg-12">
+        <div class="col-lg-12 text-center">
           <h4>Oct 30, 2017</h4>
-          <h3>Recipes of the day</h3>
+          <h1>Roast Chicken With Lemon Gravy</h1>
+          
         </div>
         <div class="col-lg-8">
-          <div class="box grid recipes">
-            <a href="{{url_for('recipe_detail')}}">
-              <img src="{{ url_for('static', filename='../static/images/recipe1.jpg')}}" alt="">
-            </a>
-            <h2><a href="{{url_for('recipe_detail')}}">Roast Chicken With Lemon Gravy</a></h2>
-            <p>Dapibus mattis a. Nec lacus nam. Volutpat molestie ipsum. Eu et fermentum malesuada et et lorem mauris aenean partur..</p>
-            <div class="tag">
-              <a href="#">Chicken</a>
-              <a href="#">Lemon</a>
-              <a href="#">Sayur</a>
+
+
+          <img src="{{ url_for('static', filename='../static/images/recipe1.jpg')}}" alt="">
+
+
+          <div class="info">
+            <div class="row">
+              <div class="col-lg-4 col-sm-4">
+                <p>Serves:</p>
+                <p><strong><i class="fa fa-users" aria-hidden="true"></i> 4 people</strong>
+                </p>
+              </div>
+              <div class="col-lg-4 col-sm-4">
+                <p>Prep Time:</p>
+                <p><strong><i class="fa fa-clock-o" aria-hidden="true"></i> 30 min</strong>
+                </p>
+              </div>
+              <div class="col-lg-4 col-sm-4">
+                <p>Cooking:</p>
+                <p><strong><i class="fa fa-clock-o" aria-hidden="true"></i> 1 Hour</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+
+
+          <p>Lorem ipsum dolor sit amet, usu eu vocibus laboramus appellantur, pro no natum ullum omittam. Mei vitae utinam complectitur eu. Te usu cibo vulputate. Id propriae adipisci pro. Legere nominati ut mel, natum libris at vix.</p>
+
+          <div class="tag">
+            <a href="#">Chicken</a>
+            <a href="#">Lemon</a>
+            <a href="#">Sayur</a>
+          </div>
+
+          <div class="ingredient-direction">
+            <div class="row">
+              <div class="col-lg-6 col-sm-6">
+                <h3>Ingredients</h3>
+                <ul class="ingredients">
+                  <li>
+                    3 Slice Chicken
+                  </li>
+                  <li>
+                    2 cubes beef bouillon, crumbled
+                  </li>
+
+                  <li>
+                    2 pounds cubed beef stew meat
+                  </li>
+                  <li>
+                    3 tablespoons vegetable oil
+                  </li>
+
+                  <li>
+                    1 large onion, chopped
+                  </li>
+
+                  <li>
+                    1 teaspoon dried rosemary
+                  </li>
+
+                  <li>
+                    1/2 teaspoon ground black pepper
+                  </li>
+                </ul>
+              </div>
+              <div class="col-lg-6 col-sm-6">
+                <h3>Directions</h3>
+                <ol class="directions">
+                  <li>Mei latine maluisset constituam ut. Eum vero vocibus at, minim debet deterruisset cum ei. Soluta virtute tibique cu quo, his vivendo suscipit ea. Legere fabulas pro ea.</li>
+                  <li>An unum soluta eos, audire meliore te nam. Mundi choro sensibus ut vim, ut sed errem ludus tractatos, eu vix fierent definiebas. Ad est autem appareat. Vim ne latine interpretaris, eum sensibus mediocritatem cu.</li>
+                  <li>Est an etiam cetero fierent. At sit primis evertitur. Est prima electram voluptatum ne. Nec id atqui contentiones mediocritatem, ut mel enim soleat audire, tecripta consequat ea.</li>
+                  <li>Vidit mutat periculis sed ex, ex mel nihil suscipiantur. Brute noster aeterno et eum, mea et idque primis repudiare.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <div class="nutrition-facts clearfix">
+            <h3>Nutrition Facts</h3>
+            <div>
+              <p>Calories:</p>
+              <p><strong>632 kcal</strong>
+              </p>
+            </div>
+            <div>
+              <p>Carbohydrate:</p>
+              <p><strong>37 g</strong>
+              </p>
+            </div>
+            <div>
+              <p>Fat:</p>
+              <p><strong>92 g</strong>
+              </p>
+            </div>
+            <div>
+              <p>Protein:</p>
+              <p><strong>63 g</strong>
+              </p>
+            </div>
+            <div>
+              <p>Cholesterol:</p>
+              <p><strong>0 mg</strong>
+              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-
-  <!-- List Recipes -->
-
-  <!-- List Recipes -->
-  <div class="list">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <h5><i class="fa fa-cutlery" aria-hidden="true"></i>  List Recipes</h5>
-        </div>
-
-        <div class="col-lg-4 col-sm-6">
-          <div class="box grid recipes">
-            <a href="{{url_for('recipe_detail')}}">
-              <img src="{{ url_for('static', filename='../static/images/recipe2.jpg')}}" alt="">
-            </a>
-            <h2><a href="{{url_for('recipe_detail')}}">Milk fruit fresh with vegetables </a></h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <div class="tag">
-              <a href="#">Milk</a>
-              <a href="#">Lemon</a>
-              <a href="#">Sayur</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-sm-6">
-          <div class="box grid recipes">
-            <a href="{{url_for('recipe_detail')}}">
-              <img src="{{ url_for('static', filename='../static/images/recipe3.jpg')}}" alt="">
-            </a>
-            <h2><a href="{{url_for('recipe_detail')}}">Pink Happy Pia Chocolate Sweet</a></h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-            <div class="tag">
-              <a href="#">Chocolate</a>
-              <a href="#">Lemon</a>
-              <a href="#">Sayur</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-sm-6">
-          <div class="box grid recipes">
-            <a href="{{url_for('recipe_detail')}}">
-              <img src="{{ url_for('static', filename='../static/images/recipe4.jpg')}}" alt="">
-            </a>
-            <h2><a href="{{url_for('recipe_detail')}}">Tasty Muffin Sweet Tin Lunches</a></h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-            <div class="tag">
-              <a href="#">Muffin</a>
-              <a href="#">Lemon</a>
-              <a href="#">Sayur</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-          <!-- Load More 
-
-          <div class="box list recipes">
-            <a href="recipe-detail.html">
-              <img src="images/square-recipes3.jpg" alt="">
-            </a>
-            <h2><a href="recipe-detail.html">Milk fruit fresh with vegetables </a></h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <div class="tag">
-              <a href="#">Milk</a>
-              <a href="#">Lemon</a>
-              <a href="#">Sayur</a>
-            </div>
-          </div>
-
-          <div class="box list recipes">
-            <a href="recipe-detail.html">
-              <img src="images/square-recipes3.jpg" alt="">
-            </a>
-            <h2><a href="recipe-detail.html">Milk fruit fresh with vegetables </a></h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <div class="tag">
-              <a href="#">Milk</a>
-              <a href="#">Lemon</a>
-              <a href="#">Sayur</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  Load More -->
 
   <!-- Footer -->
   <footer>
