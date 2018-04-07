@@ -8,7 +8,7 @@ Recipe and meal planner
 Getting Started !
 -------------------
 
-This Web app requires the latest version of [Python and Flask](http://flask.pocoo.org)
+This Web app requires the latest version of [Flask](http://flask.pocoo.org/docs/0.12/)
 
 Clone the repository:
 
@@ -20,8 +20,9 @@ Go into the repository:
 
 Create virtual environment(activate):
 
-`$ virualenv venv
- $ source venv/bin/activate`
+`$ virualenv venv`
+
+`$ source venv/bin/activate`
 
 Install dependencies:
 
@@ -39,14 +40,19 @@ Locally:
 app.config['SQLALCHEMY_DATABASE_URI'] =  '<database_url>'
 ~~~~
 
-Setup database: 
+Initialize the database: 
 
-~~~
-$ python manage.py db init
-$ python manage.py db migrate
-$ python manage.py db upgrade
-~~~
+`$ python manage.py db init`
 
-Run:
+Migrate the database:
+
+`$ python manage.py db migrate`
+
+Upgrade the database: 
+
+`$ python manage.py db upgrade`
+
+
+Run application:
 
 `$ python run.py`
