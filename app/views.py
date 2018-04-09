@@ -105,7 +105,6 @@ def upload_recipe():
         flash('File Saved', 'success')
     return render_template('upload.html',form=form,error=error)
 
-
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):
     """Send your static text file."""

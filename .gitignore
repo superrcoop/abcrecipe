@@ -1,4 +1,9 @@
 venv/
+<<<<<<< HEAD
 .DS_Store
 *.pyc
 migrations/
+=======
+*.pyc
+.DS_Store
+>>>>>>> master

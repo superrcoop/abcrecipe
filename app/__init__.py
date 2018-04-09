@@ -29,7 +29,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] 	= True
 Heroku db URL setup:
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
-
 Exclude Flask-Mail
 
 app.config['MAIL_DEFAULT_SENDER']				= 'stashit.no.reply@gmail.com'
@@ -40,13 +39,10 @@ app.config['MAIL_PASSWORD'] 					= 'Stashitpassword'
 app.config['MAIL_USE_TLS'] 						= False
 app.config['MAIL_USE_SSL'] 						= True
 
-
 Using default bcrypt settings
-
 app.config['BCRYPT_LOG_ROUNDS'] 				= 12
 app.config['BCRYPT_HASH_IDENT'] 				= '2b'
 app.config['BCRYPT_HANDLE_LONG_PASSWORDS'] 	= False
-
 mail = Mail(app)
 """
 
