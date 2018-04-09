@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>ABC Recipe</title>
+  <link href="{{ url_for('static', filename='../static/css/bootstrap.min.css') }}" rel="stylesheet">
+
+  <link href="{{ url_for('static', filename='../static/css/styles.min.css') }}" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+    <div class="container-fluid justify-content-center">
+      <a class="navbar-brand" href="{{ url_for('index')}}"><i class="fa fa-cutlery" aria-hidden="true"></i>  ABCRecipe.xyz</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href={{url_for('index')}}>Home</a>
+          </li>
+          <li class="nav-item dropdown active">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                Recipes
+
+              </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{{url_for('browse_recipe')}}">Browse Recipes</a>
+              <a class="dropdown-item" href="{{url_for('recipe_detail')}}">Recipe Detail</a>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                Meal Planner
+
+              </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{{url_for('contact')}}">Contact</a>
+            </div>
+          </li>
+          <li class="nav-item btn-submit-recipe">
+            <a class="nav-link" href="{{url_for('login')}}"><i class="fa fa-profile" aria-hidden="true"></i> Login</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="row"></div>
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col-md-6">
+				<div class="form-top">
+					<div class="form-top-left">
+						<h3>Register</h3>
+					</div>
+				</div>
+				
+					<form action="{{url_for('register')}}" method="post">
+						 {{ form.csrf_token }}
+            <div class="form-group">
+							{{ form.first_name.label }} {{ form.first_name(class='form-control', placeholder="Enter your firstname") }}
+						</div>
+						<div class="form-group">
+							{{ form.last_name.label }} {{ form.last_name(class='form-control', placeholder="Enter your lastname") }}
+						</div>
+						<div class="form-group">
+							{{ form.email.label }} {{ form.email(class='form-control', placeholder="Enter your email") }}
+						</div>
+						<div class="form-group">
+							{{ form.user_name.label }} {{ form.user_name(class='form-control', placeholder="Enter your username") }}
+						</div>
+						<div class="form-group">
+							{{ form.password.label }} {{ form.password(class='form-control', placeholder="Enter your password") }}
+						</div>
+						<div class="form-group">
+							{{ form.conf_password.label }} {{ form.conf_password(class='form-control', placeholder="Re-enter password") }}
+						</div>
+						<div class="form-group">
+							{{ form.phone.label }} {{ form.phone(class='form-control', placeholder="Enter your phone number") }}
+						</div>
+						<div class="form-group">
+							{{ form.diet.label }} {{ form.diet(class='form-control', placeholder="Enter your diet") }}
+						</div>
+						<div class="form-group">
+							{{ form.health_info.label }} {{ form.health_info(class='form-control', placeholder="Enter your medical information") }}
+						</div>
+						
+            
+            {% with messages = get_flashed_messages() %}
+             {% if messages %}
+               <ul class="flashes">
+                  {% for message in messages %}
+                   <div class="message_flash">{{ message }}</div>
+                  {% endfor %}
+              </ul>
+             {% endif %}
+            {% endwith %}
+            
+						{{ form.submit() }}
+					</form>
+				</div>
+			</div>
+ 
+</body>
+
+</html>
