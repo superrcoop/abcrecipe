@@ -25,7 +25,7 @@ def generate_file_URI():
 
 class account(db.Model, UserMixin):
 	__tablename__ 	= 'account'
-	id 				= db.Column(db.Integer, db.ForeignKey('person.id'),nullable=False)
+	id 				= db.Column(db.Integer, primary_key=True,nullable=False)
 	username 		= db.Column(db.String(80), unique=True)
 	email 			= db.Column(db.String(80), unique=True,nullable=False)
 	_password		= db.Column(db.String(255),nullable=False)
