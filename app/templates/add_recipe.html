@@ -1,7 +1,7 @@
 
 {% extends "base.html" %}
 {% block head %}
-  {{super ()}}
+  {{super()}}
     <meta name = "viewport" content = "width = device-width, initial-scale = 1">      
       <link rel = "stylesheet" href = "https://fonts.googleapis.com/icon?family=Material+Icons">
       <link rel = "stylesheet"href = "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
@@ -77,10 +77,9 @@
               <label for="ingredients">Ingredients:</label>
                 <!-- Default with no input (automatically generated)  -->
                 <p class="caption">Add an ingredient.</p>
-                        <div class="input-field col s13">
-                          <i class="material-icons prefix">textsms</i>
-                          <input type="text" id="autocomplete" class="autocomplete" on-change="console.log($('this').data('id'),3000)">
-                        </div>
+                <div class="chips chips-autocomplete input-field">
+                   <input type="text" id="autocomplete" class="chips chips-initial chips-autocomplete">
+                </div>
               <!--<div id="sortable">-->
               <!--  <div class="box ui-sortable-handle">-->
               <!--    <div class="row">-->
@@ -103,8 +102,10 @@
               <!--<a href="#" class="btn btn-light">Add new ingredient</a>-->
 
             </div>
+        </div>
+        <div class="row">
 
-            <div class="form-group">
+            <div class="form-group col-md-12">
               <label>Directions</label>
               {% for step in form.instructions %}
               {{step.instruction1(placeholder="Step 1", class="form-control")}}
@@ -114,29 +115,30 @@
               {{step.instruction5(placeholder="Step 5", class="form-control")}}
               {% endfor %}
             </div>
-
-            <div class="form-group">
+      </div>
+      <div class="row">
+      
+            <div class="form-group col-md-12">
               <label>Additional Information</label>
               <hr>
             </div>
-            <div class="form-group row">
-             <div class="col-sm-10">
+            <br>
+      </div>
+      <div class="row">
+            <div class="form-group col-md-3">
              	{{ form.serving.label }} {{ form.serving(class='form-control', placeholder="Enter a serving") }}
              </div>
             </div>
-            <br>
-            <div class="form-group row">
-              
-              <div class="col-sm-10">
+             <div class="col-md-1"></div>
+            <div class="form-group col-md-3">
                 {{ form.prep_time.label }} {{ form.prep_time(class='form-control', placeholder="Enter prep time") }}
-              </div>
             </div>
-            <br>
-            <div class="form-group row">
-              <div class="col-sm-10">
+     
+            <div class="col-md-1"></div>
+            <div class="form-group col-md-3">
                 {{ form.cook_time.label}} {{ form.cook_time(class='form-control', placeholder="Enter cook time") }}
-              </div>
             </div>
+      </div>
 
             <!--<div class="form-group">-->
             <!--  <label>Nutrition Facts</label>-->
@@ -186,36 +188,32 @@
   <script>
   /*global $*/
   $(document).ready(function() {
-  var elem = document.querySelector('.chips');
-  var instance = M.Chips.init(elem, options);
-
-  // Or with jQuery{
-  $('.chips').chips();
-  $('.chips-initial').chips({
-    data: [{
-      tag: 'chicken',
-    }, {
-      tag: 'onions',
-    }, {
-      tag: 'tomatoes',
-    }],
+    $('.chips').chips();
+    // $('.chips').click(function() {
+    //   alert( "Handler for .click() called." );
+    // });
+     
+    $('.chips-initial').chips({
+      data: [{
+        tag: 'chicken',
+      }, {
+        tag: 'onions',
+      }, {
+        tag: 'tomatoes',
+      }],
+    });
+    $('.chips-autocomplete').chips({
+      autocompleteOptions: {
+        data: {
+          'chicken': null,
+          'onions': null,
+          'tomatoes': null
+        },
+        limit: 5,
+        minLength: 1
+      }
+    });
   });
-  $('.chips-placeholder').chips({
-    placeholder: 'Enter a tag',
-    secondaryPlaceholder: '+Tag',
-  });
-  $('.chips-autocomplete').chips({
-    autocompleteOptions: {
-      data: {
-        'chicken': null,
-        'onions': null,
-        'tomatoes': null
-      },
-      limit: Infinity,
-      minLength: 1
-    }
-  });
-      });
   </script>
 {% endblock%}
 {% endblock %}
