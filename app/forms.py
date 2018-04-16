@@ -19,7 +19,7 @@ class reg_Form(FlaskForm):
     phone = StringField('Phone',validators=[DataRequired('Enter phone number')])
     diet =SelectField('Diet',choices=[('S','Select Diet'),('A','Atkins'),('N','Normal'), ('V','Vegetarian'),('V2','Vegan')],validators=[DataRequired('Entered preferred diet')])
     health_info = TextAreaField('Health Information',validators=[DataRequired('Enter your medical information')])
-    submit = SubmitField('Submit') 
+    
 
 class instruction_Form(FlaskForm):
     instruction1=StringField('Step 1')
@@ -35,9 +35,9 @@ class recipe_Form(FlaskForm):
     prep_time = StringField("Preparation Time",validators=[Required()])
     cook_time = StringField("Cook Time",validators=[Required()])
     instructions = FieldList(FormField(instruction_Form), min_entries=1, validators=[Required()])
-    diettype =SelectField('Diet',choices=[('S','Select Diet'),('A','Atkins'),('N','Normal'), ('V','Vegetarian'),('V2','Vegan')],validators=[DataRequired('Entered preferred diet')])
+    diettype =SelectField('Diet',choices=[('S','Select Diet'),('A','Atkins'),('N','Normal'), ('V','Vegetarian'),('V2','Vegan')],validators=[DataRequired('Enter preferred diet')])
     uploadedfile = FileField('Upload image here', validators=[FileRequired(),FileAllowed(['jpg','png','jpeg'])])
-    ingredients = SelectMultipleField('ingredients')
+    ingredients = SelectMultipleField('ingredients', choices=[('S','Select'),('A','Apple'),('B','Banana'), ('C','Chickken'),('D','Date'),('E','Eggs')],validators=[DataRequired('Enter diet')])
 
 class ingredient_Form(FlaskForm):
     product_name = StringField('product_name',validators=[Required()])

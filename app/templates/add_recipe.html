@@ -2,12 +2,11 @@
 {% extends "base.html" %}
 {% block head %}
   {{super()}}
-    <meta name = "viewport" content = "width = device-width, initial-scale = 1">      
-      <link rel = "stylesheet" href = "https://fonts.googleapis.com/icon?family=Material+Icons">
+      <meta name = "viewport" content = "width = device-width, initial-scale = 1">      
       <link rel = "stylesheet"href = "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
-      <script type = "text/javascript" src = "https://code.jquery.com/jquery-2.1.1.min.js"></script>           
-      <script src = "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js">
-      </script> 
+      
+  <link rel="stylesheet" href="{{url_for('static', filename='../static/css/jquery.dropdown.min.css')}}">
+
 {% endblock %}
 
 
@@ -33,28 +32,31 @@
             	{{ form.recipe_name.label }} {{ form.recipe_name(class='form-control', placeholder="Enter your recipe name") }}
             </div>
 
-            <div class="form-group">
-              <label>Choose category</label>
-              <select class="js-search-category form-control" name="category" data-placeholder="Choose Category">
-                <option value="1">All</option>
-                <option value="2">Breakfast</option>
-                <option value="3">Lunch</option>
-                <option value="4">Beverages</option>
-                <option value="5">Appetizers</option>
-                <option value="6">Soups</option>
-                <option value="7">Salads</option>
-                <option value="8">Beef</option>
-                <option value="9">Poultry</option>
-                <option value="10">Pork</option>
-                <option value="11">Seafood</option>
-                <option value="12">Vegetarian</option>
-                <option value="13">Vegetables</option>
-                <option value="14">Desserts</option>
-                <option value="15">Canning / Freezing</option>
-                <option value="16">Breads</option>
-                <option value="17">Holidays</option>
-              </select>
-            </div>
+
+            {{ form.ingredients.label }}
+            {{ form.ingredients(multiple=True)}}
+            <!--<div class="form-group">-->
+            <!--  <label>Choose category</label>-->
+            <!--  <select class="js-search-category form-control" name="category" data-placeholder="Choose Category">-->
+            <!--    <option value="1">All</option>-->
+            <!--    <option value="2">Breakfast</option>-->
+            <!--    <option value="3">Lunch</option>-->
+            <!--    <option value="4">Beverages</option>-->
+            <!--    <option value="5">Appetizers</option>-->
+            <!--    <option value="6">Soups</option>-->
+            <!--    <option value="7">Salads</option>-->
+            <!--    <option value="8">Beef</option>-->
+            <!--    <option value="9">Poultry</option>-->
+            <!--    <option value="10">Pork</option>-->
+            <!--    <option value="11">Seafood</option>-->
+            <!--    <option value="12">Vegetarian</option>-->
+            <!--    <option value="13">Vegetables</option>-->
+            <!--    <option value="14">Desserts</option>-->
+            <!--    <option value="15">Canning / Freezing</option>-->
+            <!--    <option value="16">Breads</option>-->
+            <!--    <option value="17">Holidays</option>-->
+            <!--  </select>-->
+            <!--</div>-->
 
             <div class="form-group">
              
@@ -63,7 +65,7 @@
             
             <div class="form-group">
              
-              	{{ form.calories.label }} {{ form.calories(class='form-control', placeholder="Diet") }}
+              	{{ form.calories.label }} {{ form.calories(class='form-control', placeholder="Calories") }}
             </div>
 
 
@@ -72,14 +74,20 @@
                <br>
                {{form.uploadedfile}}
             </div>
-
-            <div class="form-group">
-              <label for="ingredients">Ingredients:</label>
+            <br>
+            <p class="caption">Add an ingredient.</p>
+            <div class="ing">
+              <select style="display:none" name="" id="" multiple>
+                
+              </select>
+            </div>
+            
+            <!--</div>-->
                 <!-- Default with no input (automatically generated)  -->
-                <p class="caption">Add an ingredient.</p>
-                <div class="chips chips-autocomplete input-field">
-                   <input type="text" id="autocomplete" class="chips chips-initial chips-autocomplete">
-                </div>
+              <!--  <p class="caption">Add an ingredient.</p>-->
+              <!--  <div class="chips chips-autocomplete input-field">-->
+              <!--     <input type="text" id="autocomplete" class=" chips chips-autocomplete">-->
+              <!--  </div>-->
               <!--<div id="sortable">-->
               <!--  <div class="box ui-sortable-handle">-->
               <!--    <div class="row">-->
@@ -96,7 +104,7 @@
               <!--        <i class="fa fa-times-circle-o minusbtn" aria-hidden="true"></i>-->
               <!--      </div>-->
               <!--    </div>-->
-                </div>
+              <!--  </div>-->
 
               <!--</div>-->
               <!--<a href="#" class="btn btn-light">Add new ingredient</a>-->
@@ -122,18 +130,15 @@
               <label>Additional Information</label>
               <hr>
             </div>
-            <br>
       </div>
       <div class="row">
             <div class="form-group col-md-3">
              	{{ form.serving.label }} {{ form.serving(class='form-control', placeholder="Enter a serving") }}
              </div>
-            </div>
-             <div class="col-md-1"></div>
+            <div class="col-md-1"></div>
             <div class="form-group col-md-3">
                 {{ form.prep_time.label }} {{ form.prep_time(class='form-control', placeholder="Enter prep time") }}
             </div>
-     
             <div class="col-md-1"></div>
             <div class="form-group col-md-3">
                 {{ form.cook_time.label}} {{ form.cook_time(class='form-control', placeholder="Enter cook time") }}
@@ -174,9 +179,10 @@
             <!--    <input type="text" class="form-control">-->
             <!--  </div>-->
             <!--</div>-->
-            <div>
-            <button type="submit" class="btn btn-submit">Submit Recipe</button>
-            <div>
+            
+          <div>
+            <button type="submit" class="btn btn-info btn-md">Submit Recipe</button>
+          <div>
 
           </div>
         </div>
@@ -184,10 +190,37 @@
     </div>
   </div>
  {% block js %}  
-  <script type="text/javascript" src="static/js/materialize.min.js"></script>
+  <!--<script type="text/javascript" src="static/js/materialize.min.js"></script>-->
+  <script type = "text/javascript" src = "https://code.jquery.com/jquery-2.1.1.min.js"></script> 
+  <script type="text/javascript" src="{{url_for('static', filename='../static/js/jquery.dropdown.min.js')}}"></script>
   <script>
+  
   /*global $*/
   $(document).ready(function() {
+//     $('.ing').dropdown({
+
+//   // the maximum number of options allowed to be selected
+//   limitCount: 5,
+
+//   // search field
+//   input: '<input type="text" maxLength="20" placeholder="Search">',
+
+//   // dynamic data here
+//   data: [{'name': 'onion', 'id':'onion', "disabled": false, 'selected':false, 'groupName':'ingredients'},
+//   {'name': 'garlic', 'id':'garlic', "disabled": false, 'selected':false, 'groupName':'ingredients'},
+//   {'name': 'fish', 'id':'fish', "disabled": false, 'selected':false, 'groupName':'ingredients'}
+//   ],
+  
+//   // is search able?
+//   searchable: true,
+
+//   // when there's no result
+//   searchNoData: '<li style="color:#ddd">No Results</li>',
+
+//   // callback
+//   choice: function () {}
+
+// });
     $('.chips').chips();
     // $('.chips').click(function() {
     //   alert( "Handler for .click() called." );
@@ -213,7 +246,26 @@
         minLength: 1
       }
     });
+    
+    var ingredients = $('.chip').material_chip('data')
+    console.log(ingredients)
+    
+     $.ajax({
+            url: '/static/templates/add_recipe.html',
+            data: ingredients,
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
   });
   </script>
+  
+            
+  <!--<script src = "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script> -->
+  <!--<script src="//code.jquery.com/jquery.min.js"></script>-->
 {% endblock%}
 {% endblock %}
