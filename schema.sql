@@ -35,12 +35,12 @@ create table Recipe(
     primary key(recipe_id)
 );
 
-drop table if exists Nutrition;
-create table Nutrition(
-    nutrition_id int auto_increment not null,
-    name varchar(100) not null,
-    primary key(nutrition_id)
-);
+-- drop table if exists Nutrition;
+-- create table Nutrition(
+--     nutrition_id int auto_increment not null,
+--     name varchar(100) not null,
+--     primary key(nutrition_id)
+-- );
 
 drop table if exists Ingredients;
 create table Ingredients(
@@ -54,8 +54,6 @@ create table Kitchen(
     kitchen_id int auto_increment not null,
     user_name varchar(100) not null,
     foreign key(user_name) references User(user_name) on delete cascade on update cascade,
-    food_category varchar(20) not null,
-    quantity int not null,
     primary key(kitchen_id)
 );
 
@@ -91,14 +89,14 @@ create table Instructions(
     primary key(instruction_id)
 );
 
-drop table if exists Address;
-create table Address(
-    street_address varchar(255) not null,
-    city varchar(50),
-    zip_code varchar(20),
-    country varchar(50),
-    primary key(street_address)
-);
+-- drop table if exists Address;
+-- create table Address(
+--     street_address varchar(255) not null,
+--     city varchar(50),
+--     zip_code varchar(20),
+--     country varchar(50),
+--     primary key(street_address)
+-- );
 
 drop table if exists Uploads;
 create table Uploads(
@@ -123,6 +121,7 @@ drop table if exists Stores;
 create table Stores(
     kitchen_id int not null,
     ingredients_id int not null,
+    quantity int,
     foreign key(kitchen_id) references Kitchen(kitchen_id) on delete cascade on update cascade,
     foreign key(ingredients_id) references Ingredients(ingredients_id) on delete cascade on update cascade,
     primary key(kitchen_id,ingredients_id)
@@ -155,14 +154,14 @@ create table Requests(
     primary key(user_name,plan_id)
 );
 
-drop table if exists Located_at;
-create table Located_at(
-    user_name varchar(100) not null,
-    street_address varchar(255) not null,
-    foreign key(user_name) references User(user_name) on delete cascade on update cascade,
-    foreign key(street_address) references Address(street_address) on delete cascade on update cascade,
-    primary key(user_name, street_address)
-);
+-- drop table if exists Located_at;
+-- create table Located_at(
+--     user_name varchar(100) not null,
+--     street_address varchar(255) not null,
+--     foreign key(user_name) references User(user_name) on delete cascade on update cascade,
+--     foreign key(street_address) references Address(street_address) on delete cascade on update cascade,
+--     primary key(user_name, street_address)
+-- );
 
 drop table if exists Outlines;
 create table Outlines(
@@ -182,11 +181,11 @@ create table Consists(
     primary key(ingredients_id,measure_id)
 );
 
-drop table if exists Provide;
-create table Provide(
-    ingredients_id int,
-    nutrition_id int,
-    foreign key(ingredients_id) references Ingredients(ingredients_id) on delete cascade on update cascade,
-    foreign key(nutrition_id) references Nutrition(nutrition_id) on delete cascade on update cascade,
-    primary key(ingredients_id,nutrition_id)
-);
+-- drop table if exists Provide;
+-- create table Provide(
+--     ingredients_id int,
+--     nutrition_id int,
+--     foreign key(ingredients_id) references Ingredients(ingredients_id) on delete cascade on update cascade,
+--     foreign key(nutrition_id) references Nutrition(nutrition_id) on delete cascade on update cascade,
+--     primary key(ingredients_id,nutrition_id)
+-- );

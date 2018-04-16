@@ -1,0 +1,8 @@
+vitamins
+potassium
+carbohydrate
+protein
+fat
+sugar
+sodium
+cholesterol

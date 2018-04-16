@@ -30,7 +30,7 @@ class instruction_Form(FlaskForm):
 
 class recipe_Form(FlaskForm):  
     recipe_name = StringField("Recipe Name",validators=[Required()])
-    calories = IntegerField("Serving",validators=[Required()])
+    calories = IntegerField("Calories",validators=[Required()])
     serving = StringField("Serving",validators=[Required()])
     prep_time = StringField("Preparation Time",validators=[Required()])
     cook_time = StringField("Cook Time",validators=[Required()])

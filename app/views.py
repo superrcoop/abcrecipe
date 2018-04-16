@@ -7,9 +7,15 @@ from forms import login_Form,reg_Form,recipe_Form
 from models import User
 from . import db
 @app.route("/")
+# @login_required
 def index():
     error = None
     return render_template('index.html',error=error)
+
+# @app.before_request
+# def before_request():
+#     # logout_user()
+#     print current_user.is_authenticated
 
 @app.route("/recipe_detail")
 def recipe_detail():
@@ -74,21 +80,21 @@ def register():
                 data  = (user_name, password)
                 cursor = mysql.cursor()
                 cursor.execute(insert_stmt,data)
-                #mysql.commit()
+                mysql.commit()
                 
-                user = User(user_name=user_name,password=password)
+                insert_profile(first_name,user_name,last_name,email,phone,diet,health_info)
+                
+                user = User(user_name=user_name,hash_password=password)
                 db.session.add(user)
                 db.session.commit()
-                login_user(user)
+                
                 
                 #profile = Profile(username = username, firstName = first_name, lastName = last_name, email = email, phone=phone, diet="None", health_info="None")
                 
-                #insert_stmt = ("INSERT INTO Profile(first_name, user_name, last_name, email, phone, diet, health_info) " "VALUES (%s, %s, %s, %s, %s, %s, %s)")
-                #data = (first_name, user_name, last_name, email, phone, None, None)
-                #cursor.excecute(insert_stmt,data)
-                mysql.commit()
+
+
                 flash('success')
-                cursor.close()
+                login_user(user)
                 return redirect(url_for('index'))
             except Exception as e:
                 print e
@@ -105,12 +111,21 @@ def register():
 @login_required
 def logout():
     # Logout the user and end the session
-    session.pop('logged_in', None)
-    flash('You have been logged out.', 'danger')
+    # session.pop('logged_in', None)
+    logout_user()
+    # flash('You have been logged out.', 'danger')
     return redirect(url_for('index'))
     
+    
+def insert_profile(first_name, user_name, last_name, email, phone, diet , health_info):
+    cursor = mysql.cursor()
+    insert_stmt = ("INSERT INTO Profile(first_name, user_name, last_name, email, phone, diet, health_info) " "VALUES (%s, %s, %s, %s, %s, %s, %s)")
+    data = (first_name, user_name, last_name, email, phone, diet , health_info)
+    cursor.excecute(insert_stmt,data)
+    mysql.commit()
+    
 @app.route('/add_recipe')
-#@login_required
+@login_required
 def add_recipe():
     form = recipe_Form()
     #if request.method=="POST":

@@ -6,23 +6,17 @@ from . import db
 def generate_id():
     return int(str(uuid.uuid4().int)[:8])
     
-class User(db.Model):
+class User(db.Model, UserMixin):
 	user_name = db.Column(db.String(255), unique=True,primary_key=True)
-	password = db.Column(db.String(255))
+	hash_password = db.Column(db.String(255))
 	__tablename__ 	='User'
 	    
-	def __init__(self,user_name,password):
+	def __init__(self,user_name,hash_password):
 	    self.user_name=user_name
-	    self.password=password
-	    
-	def is_authenticated(self):
-	    return True
-	  
+	    self.hash_password=hash_password
+	 
 	def is_active(self):
 	    return True
-	   
-	def is_anonymous(self):
-	    return False
-	    
+
 	def get_id(self):
 	    return unicode(self.user_name)

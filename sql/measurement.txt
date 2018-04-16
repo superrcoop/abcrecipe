@@ -1,0 +1,24 @@
+teaspoon
+tablespoon
+cup
+pint
+quart
+gallon
+pound
+pinch
+dash
+ounces
+scoop
+ml
+liter
+gram
+kilogram
+inch
+centimeter
+F
+C
+stick
+lemon
+light cream
+heavy cream
+double cream
