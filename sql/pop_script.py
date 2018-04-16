@@ -56,8 +56,8 @@ def get_data(file_name):
     data = []
     for line in file:
         data.append(line[:-1])
-    return data
     file.close()
+    return data
 
 def insert_ingredients():
     ingredients = get_data("ingredients.txt")
@@ -607,7 +607,7 @@ def insert_uploads():
                 file.write(sql_line)
             file.close()
     else:
-        Print("File could not be found")
+        print("File could not be found")
 
 def insert_requests():
     user_path = Path("user.txt")
@@ -646,7 +646,7 @@ def insert_requests():
                 file.write(sql_line)
             file.close()
     else:
-        Print("File could not be found")
+        print("File could not be found")
 
 def create_db():
     file = open("schema.sql","w")

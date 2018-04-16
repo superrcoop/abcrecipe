@@ -72,8 +72,10 @@ def register():
             password = form.password.data
             conf_password =form.conf_password.data
             phone = form.phone.data
-            diet=form.diet.data
-            health_info=form.health_info.data
+            # diet=form.diet.data
+            # health_info=form.health_info.data
+            diet="Normal"
+            health_info="Good"
             try:
                
                 insert_stmt = ("INSERT INTO User(user_name, hash_password) " "VALUES (%s, %s)")
@@ -81,8 +83,15 @@ def register():
                 cursor = mysql.cursor()
                 cursor.execute(insert_stmt,data)
                 mysql.commit()
+                cursor.close()
                 
-                insert_profile(first_name,user_name,last_name,email,phone,diet,health_info)
+                try:
+                    insert_profile(first_name,user_name,last_name,email,phone,diet,health_info)
+                except Exception as e:
+                    print e
+                    db.session.rollback()
+                    flash(str(e))
+                    return render_template('register.html', error=error, form=form)
                 
                 user = User(user_name=user_name,hash_password=password)
                 db.session.add(user)
@@ -118,17 +127,38 @@ def logout():
     
     
 def insert_profile(first_name, user_name, last_name, email, phone, diet , health_info):
-    cursor = mysql.cursor()
     insert_stmt = ("INSERT INTO Profile(first_name, user_name, last_name, email, phone, diet, health_info) " "VALUES (%s, %s, %s, %s, %s, %s, %s)")
     data = (first_name, user_name, last_name, email, phone, diet , health_info)
-    cursor.excecute(insert_stmt,data)
+    cursor = mysql.cursor()
+    cursor.execute(insert_stmt,data)
     mysql.commit()
+    cursor.close()
     
 @app.route('/add_recipe')
 @login_required
 def add_recipe():
     form = recipe_Form()
-    #if request.method=="POST":
+    error=None
+    if request.method == 'POST':   
+        if form.validate_on_submit():
+            recipe_name = form.recipe_name.data
+            calories = form.calories.data
+            serving = form.serving.data
+            prep_time = form.prep_time.data
+            cook_time = form.cook_time.data
+            steps = form.instructions.data
+            diettype =form.diettype.data
+            uploadedfile = form.uploadedfile.data
+            filename = uploadedfile.filename
+            uploadedfile.save(os.path.join('app/static/images', filename))
+            url = 'app/static/images/%s' % (filename)
+            
+            instruction1 = steps[0]['instruction1']
+            instruction2 = steps[0]['instruction2']
+            instruction3 = steps[0]['instruction3']
+            instruction4 = steps[0]['instruction4']
+            instruction5 = steps[0]['instruction5']
+            
     return render_template('add_recipe.html',form=form)
 
 

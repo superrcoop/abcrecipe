@@ -15,7 +15,7 @@ class reg_Form(FlaskForm):
     user_name = StringField('Username', validators=[DataRequired('Enter a username')])
     email = StringField('Email Address', validators=[Required()])
     password =  PasswordField('Password',validators=[Required()])
-    conf_password= PasswordField('Re-enter password',validators=[Required()])
+    conf_password= PasswordField('Re-enter password',validators=[Required(),EqualTo('password',message=('Passwords must Match'))])
     phone = StringField('Phone',validators=[DataRequired('Enter phone number')])
     diet =SelectField('Diet',choices=[('S','Select Diet'),('A','Atkins'),('N','Normal'), ('V','Vegetarian'),('V2','Vegan')],validators=[DataRequired('Entered preferred diet')])
     health_info = TextAreaField('Health Information',validators=[DataRequired('Enter your medical information')])
