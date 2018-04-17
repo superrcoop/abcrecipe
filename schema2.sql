@@ -142,16 +142,6 @@ create table Requests(
     primary key(user_name,plan_id)
 );
 
-
--- drop table if exists Outlines;
--- create table Outlines(
---     recipe_id int not null,
---     instruction_id int not null,
---     foreign key(recipe_id) references Recipe(recipe_id) on delete cascade on update cascade,
---     foreign key(instruction_id) references Instructions(instruction_id) on delete cascade on update cascade,
---     primary key(recipe_id,instruction_id)
--- );
-
 drop table if exists Consists;
 create table Consists(
     ingredients_id int not null,
@@ -221,4 +211,13 @@ DELIMITER ;
 --     foreign key(ingredients_id) references Ingredients(ingredients_id) on delete cascade on update cascade,
 --     foreign key(nutrition_id) references Nutrition(nutrition_id) on delete cascade on update cascade,
 --     primary key(ingredients_id,nutrition_id)
+-- );
+
+-- drop table if exists Outlines;
+-- create table Outlines(
+--     recipe_id int not null,
+--     instruction_id int not null,
+--     foreign key(recipe_id) references Recipe(recipe_id) on delete cascade on update cascade,
+--     foreign key(instruction_id) references Instructions(instruction_id) on delete cascade on update cascade,
+--     primary key(recipe_id,instruction_id)
 -- );
