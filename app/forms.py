@@ -3,27 +3,22 @@ from wtforms.validators import Required, Length, Email, EqualTo, DataRequired, O
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField,FileAllowed,FileRequired
 
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
 class login_Form(FlaskForm):
-    user_name = StringField('Username',validators=[DataRequired('Enter your username')])
-    password = PasswordField('Password', validators=[DataRequired('Enter a password')])
+    username = StringField('Username', validators=[Length(min=1,max=40,message=('Username does not satisfy condition ( 1 < name.length <= 40 )')),Required('Please provide a username')])
+    password = PasswordField('Password', validators=[DataRequired('Enter password')])
 
 class reg_Form(FlaskForm):
-    first_name = StringField('First Name',validators=[DataRequired('Enter a firstname')])
-    last_name = StringField('Last Name',validators=[DataRequired('Enter a lastname')])
-    user_name = StringField('Username', validators=[DataRequired('Enter a username')])
-    email = StringField('Email Address', validators=[Required()])
-    password =  PasswordField('Password',validators=[Required()])
-    conf_password= PasswordField('Re-enter password',validators=[Required(),EqualTo('password',message=('Passwords must Match'))])
-    phone = StringField('Phone',validators=[DataRequired('Enter phone number')])
-    diet =SelectField('Diet',choices=[('S','Select Diet'),('Atkins','Atkins'),('Normal','Normal'), ('Vegetarian','Vegetarian'),('Vegan','Vegan')],validators=[DataRequired('Enter preferred diet')])
-    health_info = TextAreaField('Health Information',validators=[DataRequired('Enter your medical information')])
-    submit=SubmitField("Submit")
-    
-class ingredient_Form(FlaskForm):
-    product_name = StringField('product_name',validators=[Required()])
-    unit_name = SelectField('Unit',choices=[('S','Select Unit'),('C','Cup'),('Tbs','Tablespoon'), ('Q','Quart'),('G','Gallon')],validators=[DataRequired('Enter a unit')])
-    calories_per_unit =  IntegerField('calories_per_unit',validators=[Required()])
-    quantity = IntegerField('quantity',validators=[Required()])
+    first_name = StringField('First Name', validators=[Length(min=1,max=40,message=('First Name does not satisfy condition ( 1 < name.length <= 40 )')),Required('Please provide a First Name')])
+    last_name = StringField('Last Name', validators=[Length(min=1,max=40,message=('Last Name does not satisfy condition ( 1 < name.length <= 40 )')),Required('Please provide a Last Name')])
+    username = StringField('Username', validators=[Length(min=1,max=40,message=('Username does not satisfy condition ( 1 < name.length <= 40 )')),Required('Please provide a username')])
+    email = StringField('Email Address', validators=[Email(message='Email not Valid'),Required('Please provide an email address')])
+    password = PasswordField('Password',validators=[DataRequired('Enter a Password'),EqualTo('conf_password',message=('Passwords must Match'))])
+    conf_password=PasswordField('ReEnter Password',validators=[DataRequired('Re-enter password')])
+    phone = StringField('Phone number',validators=[DataRequired('Enter phone number')])
+    diet =SelectField('Diet Type',choices=[('S','Select Diet'),('A','Atkins'),('N','Normal'), ('V','Vegetarian'),('Ve','Vegan')],validators=[Required('Enter your preferred diet')])
+    health_info = TextAreaField('Health Information',validators=[Length(min=1,max=300,message=('First Name does not satisfy condition ( 1 < name.length <= 40 )')),DataRequired('Enter your medical information')])
 
 class recipe_Form(FlaskForm):  
     name = StringField("Recipe Name",validators=[DataRequired('Enter a recipe_name')])
@@ -36,6 +31,5 @@ class recipe_Form(FlaskForm):
     instruction3=StringField('Step 3',validators=[Optional()])
     instruction4=StringField('Step 4',validators=[Optional()])    
     diet_type =SelectField('Diet',choices=[('S','Select Diet'),('Atkins','Atkins'),('Normal','Normal'), ('Vegetarian','Vegetarian'),('Vegan','Vegan')],validators=[DataRequired('Enter preferred diet')])
-    photo= FileField('images', validators=[FileRequired(),FileAllowed(['jpg','png','jpeg'], 'Only jpg,jpeg and png images can be uploaded')])
-    submit=SubmitField("Submit")
+    photo = FileField('files[]', validators=[FileRequired(),FileAllowed(ALLOWED_EXTENSIONS, 'File not allowed')])
     ingredients =SelectMultipleField('Ingredients',choices=[('S','Select ingredients'),('Apple','Apple'),('Banana','Banana'), ('Chicken','Chicken'),('Egg','Egg'),('Flour','Flour')],validators=[DataRequired('Enter ingredients')])
