@@ -35,8 +35,6 @@ create table Recipe(
     primary key(recipe_id)
 );
 
-
-
 drop table if exists Ingredients;
 create table Ingredients(
     ingredients_id int auto_increment not null,
@@ -82,8 +80,8 @@ create table Instructions(
     recipe_id int not null,
     task varchar(255) not null,
     instruction_order int not null,
-    foreign key(recipe_id) references Recipe(recipe_id) on delete cascade on update cascade,
-    primary key(recipe_id,instruction_id)
+    foreign key Instructions(recipe_id) references Recipe(recipe_id) on delete cascade on update cascade,
+    primary key(instruction_id,recipe_id)
 );
 
 drop table if exists Uploads;
@@ -142,16 +140,6 @@ create table Requests(
     primary key(user_name,plan_id)
 );
 
-
--- drop table if exists Outlines;
--- create table Outlines(
---     recipe_id int not null,
---     instruction_id int not null,
---     foreign key(recipe_id) references Recipe(recipe_id) on delete cascade on update cascade,
---     foreign key(instruction_id) references Instructions(instruction_id) on delete cascade on update cascade,
---     primary key(recipe_id,instruction_id)
--- );
-
 drop table if exists Consists;
 create table Consists(
     ingredients_id int not null,
@@ -174,7 +162,7 @@ Drop procedure if exists GetRecipeId;
 DELIMITER //
 CREATE PROCEDURE GetRecipeId(IN name VARCHAR(120))
 BEGIN (
-    SELECT recipe.recipe_id from Recipe WHERE Recipe.name LIKE name
+    SELECT recipe_id from Recipe WHERE Recipe.name LIKE name
 );
 END //
 DELIMITER ;
@@ -187,6 +175,16 @@ BEGIN (
 );
 END //
 DELIMITER ;
+
+Drop procedure if exists GetIngredientsId;
+DELIMITER //
+CREATE PROCEDURE GetIngredientsId(IN name VARCHAR(120))
+BEGIN (
+    SELECT Ingredients.ingredients_id from Ingredients WHERE Ingredients.name LIKE name
+);
+END //
+DELIMITER ;
+
 
 -- drop table if exists Address;
 -- create table Address(
@@ -221,4 +219,13 @@ DELIMITER ;
 --     foreign key(ingredients_id) references Ingredients(ingredients_id) on delete cascade on update cascade,
 --     foreign key(nutrition_id) references Nutrition(nutrition_id) on delete cascade on update cascade,
 --     primary key(ingredients_id,nutrition_id)
+-- );
+
+-- drop table if exists Outlines;
+-- create table Outlines(
+--     recipe_id int not null,
+--     instruction_id int not null,
+--     foreign key(recipe_id) references Recipe(recipe_id) on delete cascade on update cascade,
+--     foreign key(instruction_id) references Instructions(instruction_id) on delete cascade on update cascade,
+--     primary key(recipe_id,instruction_id)
 -- );

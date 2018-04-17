@@ -2,6 +2,7 @@ from wtforms import StringField, PasswordField, FormField, IntegerField, SubmitF
 from wtforms.validators import Required, Length, Email, EqualTo, DataRequired, Optional
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField,FileAllowed,FileRequired
+from app import mysql
 
 class login_Form(FlaskForm):
     user_name = StringField('Username',validators=[DataRequired('Enter your username')])
@@ -38,4 +39,13 @@ class recipe_Form(FlaskForm):
     diet_type =SelectField('Diet',choices=[('S','Select Diet'),('Atkins','Atkins'),('Normal','Normal'), ('Vegetarian','Vegetarian'),('Vegan','Vegan')],validators=[DataRequired('Enter preferred diet')])
     photo= FileField('images', validators=[FileRequired(),FileAllowed(['jpg','png','jpeg'], 'Only jpg,jpeg and png images can be uploaded')])
     submit=SubmitField("Submit")
-    ingredients =SelectMultipleField('Ingredients',choices=[('S','Select ingredients'),('Apple','Apple'),('Banana','Banana'), ('Chicken','Chicken'),('Egg','Egg'),('Flour','Flour')],validators=[DataRequired('Enter ingredients')])
+    cursor = mysql.cursor()
+    cursor.execute("SELECT * FROM Ingredients")
+    result = cursor.fetchall()
+    choices = [('S','Select ingredients')]
+    for row in result:
+        choices.append((str(int(row[0])), row[1])) #gvh
+    # print choices
+    # ingredients =SelectMultipleField('Ingredients',choices=[('S','Select ingredients'),('Apple','Apple'),('Banana','Banana'), ('Chicken','Chicken'),('Egg','Egg'),('Flour','Flour')],validators=[DataRequired('Enter ingredients')])
+    ingredients =SelectMultipleField('Ingredients',choices=choices,validators=[DataRequired('Enter ingredients')])
+    

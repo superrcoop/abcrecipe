@@ -178,6 +178,16 @@ BEGIN (
 END //
 DELIMITER ;
 
+Drop procedure if exists GetIngredientsId;
+DELIMITER //
+CREATE PROCEDURE GetIngredientsId(IN name VARCHAR(120))
+BEGIN (
+    SELECT Ingredients.ingredients_id from Ingredients WHERE Ingredients.name LIKE name
+);
+END //
+DELIMITER ;
+
+
 -- drop table if exists Address;
 -- create table Address(
 --     street_address varchar(255) not null,

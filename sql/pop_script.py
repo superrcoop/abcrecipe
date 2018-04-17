@@ -1,6 +1,7 @@
+from __future__ import print_function
 from pathlib import Path
 from random import randint, choice
-from future import print_function
+
 
 ingredients_count = 4 #This is the number of ingredients in each recipe
 instructions_count = 4 #This is the number of instructions in each recipe
@@ -12,45 +13,45 @@ def generate_db():
     create_user()
     create_profile()
     create_recipe()
-    create_nutrition()
+    #create_nutrition()
     create_ingredients()
     create_kitchen()
     create_meal()
     create_meal_plan()
     create_measurements()
     create_instructions()
-    create_address()
+    #create_address()
     create_uploads()
     create_contains()
     create_stores()
     create_creates()
     create_constructs()
     create_requests()
-    create_located_at()
-    create_outlines()
+    #create_located_at()
+    #create_outlines()
     create_consists()
-    create_provide()
+    #create_provide()
     insert_user()
     insert_profile()
     insert_recipe()
-    insert_nutrition()
+    #insert_nutrition()
     insert_ingredients()
     insert_kitchen()
     insert_meals()
     insert_meal_plan()
     insert_measurements()
     insert_instructions()
-    insert_address()
+    #insert_address()
     insert_uploads()
     insert_contains()
     insert_stores()
     insert_creates()
     insert_constructs()
     insert_requests()
-    insert_located_at()
-    insert_outlines()
+    #insert_located_at()
+    #insert_outlines()
     insert_consists()
-    insert_provide()
+    #insert_provide()
 
 def generate_recipes(num_recipe):
     file_path = Path("recipe.txt")
@@ -171,7 +172,7 @@ def insert_contains():
         file = open("schema.sql","w")
         for index in range(0,recipe_num):
             seen = {}
-            for counter in range(0,ingredients_count):
+            for counter in range(0,randint(2,ingredients_count)):
                 sql_line = "insert into Contains(recipe_id, ingredients_id) "
                 value_id = randint(1,ingredients_num)
                 found = seen.get(value_id,False)
@@ -240,6 +241,52 @@ def insert_creates():
             file.write(sql_line)
         file.close()
 
+
+
+def insert_measurements():
+    measurements = get_data("measurement.txt")
+    file_path = Path("schema.sql")
+    if not file_path.is_file():
+        file = open("schema.sql","w")
+        for index in range(0,len(measurements)):
+            sql_line = "insert into Measurements(unit) "
+            sql_line+="values("+'"'+measurements[index]+'"'+");\n"
+            file.write(sql_line)
+        file.close()
+    else:
+        file = open("schema.sql","a")
+        for index in range(0,len(measurements)):
+            sql_line = "insert into Measurements(unit) "
+            sql_line+="values("+'"'+measurements[index]+'"'+");\n"
+            file.write(sql_line)
+        file.close()
+
+def insert_instructions(): 
+    instructions = get_data("instructions.txt")
+    recipe_num = num_records("recipe.txt")
+    file_path = Path("schema.sql")
+    if not file_path.is_file():
+        file = open("schema.sql","w")
+        sql_line = "insert into Instructions(recipe_id, task, instruction_order) values"
+        for count in range(0,recipe_num-1):
+            num = randint(2,4)
+            for index in range(0,num):
+                sql_line += "(" + str(count+1)+", "+'"'+instructions[randint(1,len(instructions)-1)]+'"'+", "+str(randint(1,instructions_count))+")"
+                sql_line += ",\n"
+        sql_line +="(" + str(recipe_num)+", "+'"'+instructions[randint(1,len(instructions)-1)]+'"'+", "+str(randint(1,instructions_count))+")"+";\n"
+        file.write(sql_line)
+        file.close()
+    else:
+        file = open("schema.sql","w")
+        sql_line = "insert into Instructions(recipe_id, task, instruction_order) values"
+        for count in range(0,recipe_num-1):
+            num = randint(2,4)
+            for index in range(0,num):
+                sql_line += "(" + str(count+1)+", "+'"'+instructions[randint(1,len(instructions)-1)]+'"'+", "+str(randint(1,instructions_count))+")"
+                sql_line += ",\n"
+        sql_line +="(" + str(recipe_num)+", "+'"'+instructions[randint(1,len(instructions)-1)]+'"'+", "+str(randint(1,instructions_count))+")"+";\n"
+        file.write(sql_line)
+        file.close()
 def insert_outlines():
     recipe_num = num_records("recipe.txt")
     instruction_num = num_records("instructions.txt")
@@ -279,42 +326,6 @@ def insert_outlines():
                         found = seen.get(value_id,False)
                     sql_line+="values("+str((index+1))+", "+str(value_id)+");\n"
                 file.write(sql_line)
-        file.close()
-
-def insert_measurements():
-    measurements = get_data("measurement.txt")
-    file_path = Path("schema.sql")
-    if not file_path.is_file():
-        file = open("schema.sql","w")
-        for index in range(0,len(measurements)):
-            sql_line = "insert into Measurements(unit) "
-            sql_line+="values("+'"'+measurements[index]+'"'+");\n"
-            file.write(sql_line)
-        file.close()
-    else:
-        file = open("schema.sql","a")
-        for index in range(0,len(measurements)):
-            sql_line = "insert into Measurements(unit) "
-            sql_line+="values("+'"'+measurements[index]+'"'+");\n"
-            file.write(sql_line)
-        file.close()
-
-def insert_instructions(): 
-    instructions = get_data("instructions.txt")
-    file_path = Path("schema.sql")
-    if not file_path.is_file():
-        file = open("schema.sql","w")
-        for index in range(0,len(instructions)):
-            sql_line = "insert into Instructions(task, instruction_order) "
-            sql_line += "values("+'"'+instructions[index]+'"'+str(randint(1,ingredients_count))+");\n"
-            file.write(sql_line)
-        file.close()
-    else:
-        file = open("schema.sql","a")
-        for index in range(0,len(instructions)):
-            sql_line = "insert into Instructions(task) "
-            sql_line += "values("+'"'+instructions[index]+'"'+str(randint(1,ingredients_count))+");\n"
-            file.write(sql_line)
         file.close()
 
 def num_records(filename):
@@ -1008,3 +1019,7 @@ def create_provide():
         file.close()
     else:
         print("File was not found")
+
+
+#if __name__ == "__main__":
+#    insert_ingredients()

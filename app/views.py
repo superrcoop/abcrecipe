@@ -130,15 +130,15 @@ def add_recipe():
             instruction2=form.instruction2.data
             instruction3=form.instruction3.data
             instruction4=form.instruction3.data
-            
-            
+            ingredients=form.ingredients.data
+            #flash(ingredients)
             image=request.files['photo']
             if allowed_file(image.filename):
                 filename=secure_filename(image.filename)
                 image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             else:
                 flash('Incorrect File Format','danger')
-                return redirect(url_for('profile'))
+                return redirect(url_for('home'))
                 
        
             insert_stmt = ("INSERT INTO Recipe(name,calorie,servings,cook_time,prep_time,diet_type) " "VALUES (%s, %s, %s, %s, %s, %s)")
@@ -150,16 +150,21 @@ def add_recipe():
                 
               
             insertinstructions(name,instruction1,instruction2,instruction3,instruction4)
-                
+            insertingredients(name,ingredients)    
            
-        
+            flash(ingredients)
+
+            flash(len(ingredients))
             flash('success')
             return redirect(url_for('recipes'))
         else:
+            ingredients=form.ingredients.data
+            flash(ingredients)
+            flash(len(ingredients))
             flash('Error entering')
             render_template('add_recipe.html' , error=error, form=form)
-    else:
-        return render_template('add_recipe.html', form=form)
+    
+    return render_template('add_recipe.html', form=form)
 
 def insertinstructions(name,instruction1,instruction2,instruction3,instruction4):
     
@@ -193,7 +198,7 @@ def insertinstructions(name,instruction1,instruction2,instruction3,instruction4)
     for row in result:
         recipes.append(row)
         
-    print (recipes[0])
+    # print (recipes[0])
         
     cursor = mysql.cursor()
     insert_stmt = ("INSERT INTO Instructions(recipe_id,task,instruction_order) " "VALUES (%s, %s, %s)")
@@ -235,7 +240,39 @@ def insertinstructions(name,instruction1,instruction2,instruction3,instruction4)
     # mysql.commit()
     # cursor.close()
     
+def insertingredients(name,ingredients):
 
+    cursor = mysql.cursor()
+    cursor.callproc("GetRecipeId",[str(name)])
+    result = cursor.fetchall()
+    cursor.close()
+    mysql.commit()
+    recipes = []
+    for row in result:
+        recipes.append(row)
+    '''    
+    for i in range (0,len(ingredients)-1):
+        cursor= mysql.cursor()
+        cursor.callproc("GetIngredientsId",[str(ingredients[i])])
+        result = cursor.fetchall()
+        cursor.close()
+        mysql.commit()
+        ingredients = []
+        for row in result:
+            ingredients.append(row)
+        
+    '''
+        
+    cursor = mysql.cursor()
+    for i in range(0,len(ingredients)):
+        insert_stmt = ("INSERT INTO Contains(recipe_id,ingredients_id) " "VALUES (%s, %s)")
+        data  = (recipes[0],ingredients[i])
+        cursor.execute(insert_stmt,data)
+    mysql.commit()
+    cursor.close()
+    
+  
+    
 @app.route('/recipes', methods=["GET","POST"])
 def recipes():
     cursor = mysql.cursor()
@@ -248,7 +285,7 @@ def recipes():
     recipes = []
     for row in result:
         recipes.append(row)
-    print recipes
+    # print recipes
     if request.method == 'POST':
         if result is not None:
             return render_template("recipes.html", form=form, recipes=recipes)
@@ -314,6 +351,7 @@ def load_user(user_name):
         return user
     except Exception as e:
         print str(e)
+        
         return None
     
 @app.route('/<file_name>.txt')
