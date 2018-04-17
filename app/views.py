@@ -215,8 +215,8 @@ def insertinstructions(name,instruction1,instruction2,instruction3,instruction4)
         instructions.append(row)
     for row in result_4:
         instructions.append(row)    
-    #insert_stmt = ("INSERT INTO Outlines(recipe_id,instructions_id) " "VALUES (%s, %s)")
-    #data  = (result[0],instructions[0])
+    insert_stmt = ("INSERT INTO Outlines(recipe_id,instructions_id) " "VALUES (%s, %s)")
+    data  = (result[0],instructions[0])
     
 
 @app.route('/recipes', methods=["GET","POST"])
