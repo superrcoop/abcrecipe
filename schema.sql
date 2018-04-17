@@ -27,8 +27,8 @@ drop table if exists Recipe;
 create table Recipe(
     recipe_id int auto_increment not null,
     name varchar(100) not null,
-    calorie decimal(7,2),
-    servings decimal(4,2),
+    calorie int,
+    servings int,
     cook_time varchar(100) not null,
     prep_time varchar(100) not null,
     diet_type varchar(100) not null,

@@ -96,11 +96,6 @@ def register():
                 user = User(user_name=user_name,hash_password=password)
                 db.session.add(user)
                 db.session.commit()
-                
-                
-                #profile = Profile(username = username, firstName = first_name, lastName = last_name, email = email, phone=phone, diet="None", health_info="None")
-                
-
 
                 flash('success')
                 login_user(user)
@@ -159,25 +154,30 @@ def add_recipe():
             instruction4 = steps[0]['instruction4']
             instruction5 = steps[0]['instruction5']
             
-    return render_template('add_recipe.html',form=form)
+            try:
+               
+                insert_stmt = ("INSERT INTO Recipe(name,calories,servings,prep_time,cook_time,diet_type) " "VALUES (%s, %d, %d, %s, %s, %s)")
+                data  = (recipe_name,calories,serving,prep_time,cook_time,diettype)
+                cursor = mysql.cursor()
+                cursor.execute(insert_stmt,data)
+                mysql.commit()
+                cursor.close()
 
+                flash('success')
+                return redirect(url_for('index'))
+            except Exception as e:
+                print e
+                db.session.rollback()
+                flash(str(e))
+                return render_template('add_recipe.html',error=error,form=form)
 
-@app.route('/upload', methods=['POST', 'GET'])
-@login_required
-def upload_recipe():
-    error,message=None,None
-    form = upload_Form(CombinedMultiDict((request.files, request.form)))
-    if request.method == 'POST' and form.validate_on_submit():
-        file = form.upload.data
-        if file.filename == '':
-            error='No selected file'
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(current_user.file_URI, filename))
         else:
-             error='File not allowed'
-        flash('File Saved', 'success')
-    return render_template('upload.html',form=form,error=error)
+            flash('Error signing up')
+            return render_template('add_recipe.html',error=error,form=form)
+
+    else:
+        return render_template('add_recipe.html',error=error,form=form)
+
 
 def flash_errors(form):
     for field, errors in form.errors.items():
