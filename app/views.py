@@ -140,27 +140,18 @@ def add_recipe():
                 flash('Incorrect File Format','danger')
                 return redirect(url_for('profile'))
                 
-            try:
-                insert_stmt = ("INSERT INTO Recipe(name,calorie,servings,cook_time,prep_time,diet_type) " "VALUES (%s, %s, %s, %s, %s, %s)")
-                data  = (name,calorie,servings,cook_time,prep_time,diet_type)
-                cursor = mysql.cursor()
-                cursor.execute(insert_stmt,data)
-                mysql.commit()
-                cursor.close()
+       
+            insert_stmt = ("INSERT INTO Recipe(name,calorie,servings,cook_time,prep_time,diet_type) " "VALUES (%s, %s, %s, %s, %s, %s)")
+            data  = (name,calorie,servings,cook_time,prep_time,diet_type)
+            cursor = mysql.cursor()
+            cursor.execute(insert_stmt,data)
+            mysql.commit()
+            cursor.close()
                 
-                try:
-                    insertinstructions(name,instruction1,instruction2,instruction3,instruction4)
-                except Exception as e:
-                    print e
-                    db.session.rollback()
-                    flash(str(e))
-                    return render_template('add_recipe.html', error=error, form=form)
-                    
-            except Exception as e:
-                    print e
-                    db.session.rollback()
-                    flash(str(e))
-                    return render_template('add_recipe.html', error=error, form=form)
+              
+            insertinstructions(name,instruction1,instruction2,instruction3,instruction4)
+                
+           
         
             flash('success')
             return redirect(url_for('recipes'))
@@ -172,77 +163,77 @@ def add_recipe():
 
 def insertinstructions(name,instruction1,instruction2,instruction3,instruction4):
     
-    cursor = mysql.cursor()
-    insert_stmt = ("INSERT INTO Instructions(task,order) " "VALUES (%s, %s)")
-    data  = (instruction1,1)
-    cursor.execute(insert_stmt,data)
-    insert_stmt = ("INSERT INTO Instructions(task,order) " "VALUES (%s, %s)")
-    data  = (instruction2,2)
-    cursor.execute(insert_stmt,data)
-    insert_stmt = ("INSERT INTO Instructions(task,order) " "VALUES (%s, %s)")
-    data  = (instruction3,3)
-    cursor.execute(insert_stmt,data)
-    insert_stmt = ("INSERT INTO Instructions(task,order) " "VALUES (%s, %s)")
-    data  = (instruction4,4)
-    cursor.execute(insert_stmt,data)
-    mysql.commit()
-    cursor.close()
+    # cursor = mysql.cursor()
+    # cursor.callproc("GetInstructionsId",[str(instruction1)])
+    # result_1 = cursor.fetchall()
+    # cursor.close()
     
-    cursor = mysql.cursor()
-    cursor.callproc("GetInstructionsId",[str(instruction1)])
-    result_1 = cursor.fetchall()
-    cursor.close()
+    # cursor = mysql.cursor()
+    # cursor.callproc("GetInstructionsId",[str(instruction2)])
+    # result_2 = cursor.fetchall()
+    # cursor.close()
     
-    cursor = mysql.cursor()
-    cursor.callproc("GetInstructionsId",[str(instruction2)])
-    result_2 = cursor.fetchall()
-    cursor.close()
+    # cursor = mysql.cursor()
+    # cursor.callproc("GetInstructionsId",[str(instruction3)])
+    # result_3 = cursor.fetchall()
+    # cursor.close()
     
-    cursor = mysql.cursor()
-    cursor.callproc("GetInstructionsId",[str(instruction3)])
-    result_3 = cursor.fetchall()
-    cursor.close()
-    
-    cursor = mysql.cursor()
-    cursor.callproc("GetInstructionsId",[str(instruction4)])
-    result_4 = cursor.fetchall()
-    cursor.close()
+    # cursor = mysql.cursor()
+    # cursor.callproc("GetInstructionsId",[str(instruction4)])
+    # result_4 = cursor.fetchall()
+    # cursor.close()
     
     cursor = mysql.cursor()
     cursor.callproc("GetRecipeId",[str(name)])
     result = cursor.fetchall()
     cursor.close()
-
-    
     mysql.commit()
     recipes = []
     instructions=[]
     for row in result:
         recipes.append(row)
-    
-    for row in result_1:
-        instructions.append(row)
-    for row in result_2:
-        instructions.append(row)
-    for row in result_3:
-        instructions.append(row)
-    for row in result_4:
-        instructions.append(row)   
+        
+    print (recipes[0])
+        
     cursor = mysql.cursor()
-    insert_stmt = ("INSERT INTO Outlines(recipe_id,instructions_id) " "VALUES (%s, %s)")
-    data  = (recipes[0],instructions[0])
+    insert_stmt = ("INSERT INTO Instructions(recipe_id,task,instruction_order) " "VALUES (%s, %s, %s)")
+    data  = (recipes[0],instruction1,"1")
     cursor.execute(insert_stmt,data)
-    insert_stmt = ("INSERT INTO Outlines(recipe_id,instructions_id) " "VALUES (%s, %s)")
-    data  = (recipes[0],instructions[1])
+    insert_stmt = ("INSERT INTO Instructions(recipe_id,task,instruction_order) " "VALUES (%s, %s, %s)")
+    data  = (recipes[0],instruction2,"2")
     cursor.execute(insert_stmt,data)
-    insert_stmt = ("INSERT INTO Outlines(recipe_id,instructions_id) " "VALUES (%s, %s)")
-    data  = (recipes[0],instructions[2])
+    insert_stmt = ("INSERT INTO Instructions(recipe_id,task,instruction_order) " "VALUES (%s, %s, %s)")
+    data  = (recipes[0],instruction3,"3")
     cursor.execute(insert_stmt,data)
-    insert_stmt = ("INSERT INTO Outlines(recipe_id,instructions_id) " "VALUES (%s, %s)")
-    data  = (recipes[0],instructions[3])
+    insert_stmt = ("INSERT INTO Instructions(recipe_id,task,instruction_order) " "VALUES (%s, %s, %s)")
+    data  = (recipes[0],instruction4,"4")
     cursor.execute(insert_stmt,data)
     mysql.commit()
     cursor.close()
+    
+    # for row in result_1:
+    #     instructions.append(row)
+    # for row in result_2:
+    #     instructions.append(row)
+    # for row in result_3:
+    #     instructions.append(row)
+    # for row in result_4:
+    #     instructions.append(row)   
+    # cursor = mysql.cursor()
+    # insert_stmt = ("INSERT INTO Outlines(recipe_id,instructions_id) " "VALUES (%s, %s)")
+    # data  = (recipes[0],instructions[0])
+    # cursor.execute(insert_stmt,data)
+    # insert_stmt = ("INSERT INTO Outlines(recipe_id,instructions_id) " "VALUES (%s, %s)")
+    # data  = (recipes[0],instructions[1])
+    # cursor.execute(insert_stmt,data)
+    # insert_stmt = ("INSERT INTO Outlines(recipe_id,instructions_id) " "VALUES (%s, %s)")
+    # data  = (recipes[0],instructions[2])
+    # cursor.execute(insert_stmt,data)
+    # insert_stmt = ("INSERT INTO Outlines(recipe_id,instructions_id) " "VALUES (%s, %s)")
+    # data  = (recipes[0],instructions[3])
+    # cursor.execute(insert_stmt,data)
+    # mysql.commit()
+    # cursor.close()
     
 
 @app.route('/recipes', methods=["GET","POST"])

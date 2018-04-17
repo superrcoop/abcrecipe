@@ -82,8 +82,8 @@ create table Instructions(
     recipe_id int not null,
     task varchar(255) not null,
     instruction_order int not null,
-    foreign key(recipe_id) references Recipe(recipe_id) on delete cascade on update cascade,
-    primary key(recipe_id,instruction_id)
+    foreign key Instructions(recipe_id) references Recipe(recipe_id) on delete cascade on update cascade,
+    primary key(instruction_id,recipe_id)
 );
 
 drop table if exists Uploads;
@@ -164,7 +164,7 @@ Drop procedure if exists GetRecipeId;
 DELIMITER //
 CREATE PROCEDURE GetRecipeId(IN name VARCHAR(120))
 BEGIN (
-    SELECT recipe.recipe_id from Recipe WHERE Recipe.name LIKE name
+    SELECT recipe_id from Recipe WHERE Recipe.name LIKE name
 );
 END //
 DELIMITER ;
