@@ -3,9 +3,11 @@ import time
 from app import app,login_manager, mysql
 from flask import Flask, abort, request, jsonify, url_for, render_template, redirect, flash
 from flask_login import login_user, logout_user, current_user, login_required
-from forms import login_Form,reg_Form,recipe_Form
+from forms import login_Form,reg_Form,recipe_Form,ingredient_Form,instruction_Form
 from models import User
+from werkzeug.utils import secure_filename
 from . import db
+
 @app.route("/")
 # @login_required
 def index():
@@ -129,24 +131,28 @@ def insert_profile(first_name, user_name, last_name, email, phone, diet , health
     mysql.commit()
     cursor.close()
     
-@app.route('/add_recipe')
+@app.route('/add_recipe', methods=['GET' , 'POST'])
 @login_required
 def add_recipe():
-    form = recipe_Form()
+    form =recipe_Form()
     error=None
-    if request.method == 'POST':   
+    print (form)
+    if request.method == 'POST' :
         if form.validate_on_submit():
             recipe_name = form.recipe_name.data
-            calories = form.calories.data
-            serving = form.serving.data
+            calorie = int(form.calorie.data)
+            servings = int(form.servings.data)
             prep_time = form.prep_time.data
             cook_time = form.cook_time.data
             steps = form.instructions.data
-            diettype =form.diettype.data
-            uploadedfile = form.uploadedfile.data
-            filename = uploadedfile.filename
-            uploadedfile.save(os.path.join('app/static/images', filename))
-            url = 'app/static/images/%s' % (filename)
+            diet_type =form.diet_type.data
+            images=request.files['images']
+            if allowed_file(images.filename):
+                filename=secure_filename(images.filename)
+                images.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            else:
+                flash('Incorrect File Format','danger')
+                return redirect(url_for('profile'))
             
             instruction1 = steps[0]['instruction1']
             instruction2 = steps[0]['instruction2']
@@ -156,8 +162,8 @@ def add_recipe():
             
             try:
                
-                insert_stmt = ("INSERT INTO Recipe(name,calories,servings,prep_time,cook_time,diet_type) " "VALUES (%s, %d, %d, %s, %s, %s)")
-                data  = (recipe_name,calories,serving,prep_time,cook_time,diettype)
+                insert_stmt = ("INSERT INTO Recipe(name,calorie,servings,prep_time,cook_time,diet_type) " "VALUES (%s, %d, %d, %s, %s, %s)")
+                data  = (recipe_name,calorie,servings,prep_time,cook_time,diet_type)
                 cursor = mysql.cursor()
                 cursor.execute(insert_stmt,data)
                 mysql.commit()
@@ -170,14 +176,16 @@ def add_recipe():
                 db.session.rollback()
                 flash(str(e))
                 return render_template('add_recipe.html',error=error,form=form)
-
         else:
-            flash('Error signing up')
+            flash('Error adding recipe')
+            return render_template('add_recipe.html',error=error,form=form)
+    else:
+            flash('Error posting')
             return render_template('add_recipe.html',error=error,form=form)
 
-    else:
-        return render_template('add_recipe.html',error=error,form=form)
-
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_UPLOADS']
 
 def flash_errors(form):
     for field, errors in form.errors.items():

@@ -1,92 +1,23 @@
-{% extends "base.html" %} 
-{% block head %}
-      {{super()}}
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-      <!--Import materialize.css-->
-      <link type="text/css" rel="stylesheet" href="static/css/materialize.min.css"  media="screen,projection"/>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
-
-
-      {% endblock %} 
-      
-	{% block js %} 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-	<script type="text/javascript" src="static/js/materialize.min.js"></script>
-	<script src="https://code.jquery.com/jquery-1.8.0.min.js"></script>
-	<script>
-	 /*global $*/
-	 /*global jQuery*/
-	 $(document).ready(function(){
-	 	jQuery(function($){
-	   $('.chips').chips();
-	   // $('.chips').click(function() {
-	   //   alert( "Handler for .click() called." );
-	   // });
-	    
-	   $('.chips-initial').chips({
-	     data: [{
-	       tag: 'chicken',
-	     }, {
-	       tag: 'onions',
-	     }, {
-	       tag: 'tomatoes',
-	     }],
-	   });
-	   $('.chips-autocomplete').chips({
-	     autocompleteOptions: {
-	       data: {
-	         'chicken': null,
-	         'onions': null,
-	         'tomatoes': null
-	       },
-	       limit: 5,
-	       minLength: 1
-	     }
-	   });
-	   
-	   var ingredients = $('.chip').material_chip('data')
-	   console.log(ingredients)
-	   
-	    $.ajax({
-	           url: '/static/templates/add_recipe.html',
-	           data: ingredients,
-	           type: 'POST',
-	           success: function(response) {
-	               console.log("reach"+response);
-	           },
-	           error: function(error) {
-	               console.log(error);
-	           }
-	       });
-	 });
-	 });
-	</script> 
-
-
-
- {% endblock%} 
+{% extends "base.html" %}  
+	
 {% block main %} 
-  <!-- Submit Recipe-->
-	<div class="submit">
-		<div class="title">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-12">
-						<h2>Submit Recipe</h2>
+  <div class="row"></div>
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col-md-8">
+				<div class="form-top">
+					<div class="form-top-left">
+						<h3>Submit Recipe</h3>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="content">
-			<div class="container">
-				<form action="{{url_for('add_recipe')}}" method="post">
+				<form action="{{url_for('add_recipe')}}" method="POST">
+				{{ form.csrf_token }}
 					<div class="row">
 						<div class="col-lg-12">
 						
-							{{ form.csrf_token }}
+							
 							<div class="form-group">
-								{{ form.recipe_name.label }} {{ form.recipe_name(class='form-control', placeholder="Enter your recipe name") }}
+								{{ form.name.label }} {{ form.name(class='form-control', placeholder="Enter your recipe name") }}
 							</div>
 							<!--<div class="form-group">-->
 							 <!--  <label>Choose category</label>-->
@@ -111,22 +42,29 @@
 							 <!--  </select>-->
 							 <!--</div>-->
 							<div class="form-group">
-								{{ form.diettype.label }} {{ form.diettype(class='form-control', placeholder="Diet") }}
+								{{ form.diet_type.label }} {{ form.diet_type(class='form-control', placeholder="Diet") }}
 							</div>
 							<div class="form-group">
-								{{ form.calories.label }} {{ form.calories(class='form-control', placeholder="Calories") }}
+								{{ form.calorie.label }} {{ form.calorie(class='form-control', placeholder="Calories") }}
 							</div>
 							<div class="form-group">
-								{{form.uploadedfile.label}}<br>
-								{{form.uploadedfile}}
+								{{form.images.label}}<br>
+								{{form.images}}
 							</div><br>
 
-							<!--</div>-->
-							<!-- Default with no input (automatically generated)  -->
-							<p class="caption">Add an ingredient.</p>
-							<div class="chips chips-autocomplete chips-initial input-field">
-								<input class=" chips chips-autocomplete" id="autocomplete" type="text">
-							</div><!--<div id="sortable">-->
+						<div>
+						<p> Hold down control to select multiple options</p>
+						<select class="col-md-8" multiple id="" name="">
+						    <option value="" disabled selected>Choose your ingredient</option>
+						    <option value="1">Apple</option>
+						    <option value="2">Banana</option>
+						    <option value="3">Chicken</option>
+						    <option value="4">Egg</option>
+						    <option value="5">Flour</option>
+						</select>
+						</div>
+						
+							<!--<div id="sortable">-->
 							<!--  <div class="box ui-sortable-handle">-->
 							<!--    <div class="row">-->
 							<!--      <div class="col-lg-1 col-sm-1">-->
@@ -150,7 +88,13 @@
 				</div>
 				<div class="row">
 					<div class="form-group col-md-12">
-						<label>Directions</label> {% for step in form.instructions %} {{step.instruction1(placeholder="Step 1", class="form-control")}} {{step.instruction2(placeholder="Step 2", class="form-control")}} {{step.instruction3(placeholder="Step 3", class="form-control")}} {{step.instruction4(placeholder="Step 4", class="form-control")}} {{step.instruction5(placeholder="Step 5", class="form-control")}} {% endfor %}
+						<label>Directions</label> 
+						{% for step in form.instructions %} 
+						{{step.instruction1(placeholder="Step 1", class="form-control")}} 
+						{{step.instruction2(placeholder="Step 2", class="form-control")}} 
+						{{step.instruction3(placeholder="Step 3", class="form-control")}} 
+						{{step.instruction4(placeholder="Step 4", class="form-control")}} 
+						{% endfor %}
 					</div>
 				</div>
 				<div class="row">
@@ -161,7 +105,7 @@
 				</div>
 				<div class="row">
 					<div class="form-group col-md-3">
-						{{ form.serving.label }} {{ form.serving(class='form-control', placeholder="Enter a serving") }}
+						{{ form.servings.label }} {{ form.servings(class='form-control', placeholder="Enter a serving") }}
 					</div>
 					<div class="col-md-1"></div>
 					<div class="form-group col-md-3">
@@ -206,25 +150,20 @@
 				<!--    <input type="text" class="form-control">-->
 				<!--  </div>-->
 				<!--</div>-->
-				{{ form.submit() }}
-				</form>
-				</div>
-					
-					<div>
-						{% if error %}
-						<div class="alert alert-danger">
-							<strong>Error:</strong> {{ form.errors }}
-						</div>{% endif %} {% with messages = get_flashed_messages() %} {% if messages %}
-						<div class="flashes" style="margin-left: 2em">
-							{% for message in messages %}
-							<div class="message_flash">
-								{{ message }}
-							</div>{% endfor %}
-						</div>{% endif %} {% endwith %}
-					</div>
+				{% with messages = get_flashed_messages() %}
+             {% if messages %}
+               <ul class="flashes">
+                  {% for message in messages %}
+                   <div class="message_flash">{{ message }}</div>
+                  {% endfor %}
+              </ul>
+             {% endif %}
+            {% endwith %}
+            
+						{{ form.submit() }}
+					</form>
 				</div>
 			</div>
-		</div>
-	</div>
+
 
  {% endblock %}
