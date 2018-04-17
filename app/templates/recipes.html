@@ -31,12 +31,12 @@
                     <div class="row border-style center profile profiles-container">
                             <div class="col pro-data">
                                 <span class="name">name: {{recipe[1]}}</span></br>
-                                <span class="name">prep time: {{recipe[6]}}</span></br>
-                                <span class="name">cook time: {{recipe[5]}}</span>
+                                <span class="name">prep time: {{recipe[5]}}</span></br>
+                                <span class="name">cook time: {{recipe[4]}}</span>
                             </div>
                         <div class="view-profile center col bio">
                             </br>
-                            <a class="view-btn btn-recipe" href="{{ url_for('recipe_detail', recipeid=recipe[0]) }}">View Recipe</a>
+                            <a class="view-btn btn-recipe" href="{{ url_for('recipe_details', recipeid=recipe[0]) }}">View Recipe</a>
                         </div>
                     </div>
                 {% endfor %}

@@ -35,6 +35,8 @@ create table Recipe(
     primary key(recipe_id)
 );
 
+
+
 drop table if exists Ingredients;
 create table Ingredients(
     ingredients_id int auto_increment not null,
@@ -185,6 +187,41 @@ BEGIN (
 END //
 DELIMITER ;
 
+Drop procedure if exists GetRecipeInfo;
+DELIMITER //
+CREATE PROCEDURE GetRecipeInfo(IN id int)
+BEGIN (
+    SELECT * from Recipe WHERE Recipe.recipe_id=id
+);
+END //
+DELIMITER ;
+
+Drop procedure if exists GetIngredients;
+DELIMITER //
+CREATE PROCEDURE GetIngredients(IN id int)
+BEGIN (
+    SELECT * from Contains WHERE Contains.recipe_id=id
+);
+END //
+DELIMITER ;
+
+Drop procedure if exists GetIngredientsInfo;
+DELIMITER //
+CREATE PROCEDURE GetIngredientsInfo(IN id int)
+BEGIN (
+    SELECT * from Ingredients WHERE Ingredients.ingredients_id=id
+);
+END //
+DELIMITER ;
+
+Drop procedure if exists GetInstructionsInfo;
+DELIMITER //
+CREATE PROCEDURE GetInstructionsInfo(IN id int)
+BEGIN (
+    SELECT * from Instructions WHERE Instructions.recipe_id=id
+);
+END //
+DELIMITER ;
 
 -- drop table if exists Address;
 -- create table Address(

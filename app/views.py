@@ -292,22 +292,61 @@ def recipes():
     else:
         return render_template("recipes.html",form=form)
         
-# @app.route('/recipe_details/<recipeid>',methods=["GET"])
-# def recipe_details(recipeid):
-#     cursor = mysql.cursor()
-#     cursor.callproc("GetRecipeById",[str(recipeid)])
-#     result = cursor.fetchall()
-#     cursor.close()
-#     cursor = mysql.cursor()
-
-#     cursor.close()
-#     connection.commit()
-   
-#     recipes = []
-#     for row in result:
-#         recipes.append(row)
+def get_uploaded_images():
+    rootdir = os.getcwd()
+    print rootdir
+    img = []
+    for subdir, dirs, files in os.walk(rootdir + '/app/static/uploads'):
+        for file in files:
+            img.append(os.path.join(subdir, file).split('/')[-1])
+    return img
     
-#     return render_template("recipe.html",recipes=recipes)
+@app.route('/recipe_details/<recipeid>')
+def recipe_details(recipeid):
+    # cursor = mysql.cursor()
+    # insert_stmt = ("SELECT * FROM RECIPE WHERE recipe_id = "+recipeid)
+    # recipe = cursor.execute(insert_stmt)
+    imagenames= get_uploaded_images()
+    
+    cursor = mysql.cursor()
+    cursor.callproc("GetRecipeInfo",[str(recipeid)])
+    result_1 = cursor.fetchall()
+    cursor.close()
+    
+    cursor = mysql.cursor()
+    cursor.callproc("GetIngredients",[str(recipeid)])
+    result_2 = cursor.fetchall()
+    cursor.close()
+
+    
+    cursor = mysql.cursor()
+    cursor.callproc("GetInstructionsInfo",[str(recipeid)])
+    result_3 = cursor.fetchall()
+    cursor.close()
+    
+    recipes = []
+    ingredients=[]
+    instructions=[]
+    ingredient_name=[]
+    for row in result_1:
+        recipes.append(row)
+    
+    for row in result_3:
+        instructions.append(row)
+        
+    for row in result_2:
+        ingredients.append(row)
+        
+    for i in range(0,len(ingredients)):
+        cursor = mysql.cursor()
+        cursor.callproc("GetIngredientsInfo",[str(ingredients[i][0])])
+        result_4 = cursor.fetchall()
+        cursor.close()
+        for row in result_4:
+            ingredient_name.append(row)
+    flash(ingredient_name)       
+    print(ingredient_name)
+    return render_template("recipe_detail.html",recipes=recipes,instructions=instructions,ingredient_name=ingredient_name,imagenames=imagenames)
     
 @app.route('/logout')
 @login_required
