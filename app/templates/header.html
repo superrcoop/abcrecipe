@@ -11,20 +11,21 @@
           </li>
           <li class="nav-item dropdown active">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-                Recipes
-
-              </a>
+            Recipes
+            </a>
             <div class="dropdown-menu">
-                        {% if current_user.is_authenticated %}
-                 <a class="dropdown-item" href="{{url_for('browse_recipe')}}">Browse Recipes</a>
+            {% if current_user.is_authenticated %}
+              <a class="dropdown-item" href="{{url_for('browse_recipe')}}">Browse Recipes</a>
               <a class="dropdown-item" href="{{url_for('recipe_detail')}}">Recipe Detail</a>
               <a class="dropdown-item" href="{{url_for('add_recipe')}}">Add Detail</a>
-      {% else %}
-          <a class="dropdown-item" href="{{url_for('browse_recipe')}}">Browse Recipes</a>
-              <a class="dropdown-item" href="{{url_for('recipe_detail')}}">Recipe Detail</a>
+              <a class="dropdown-item" href="{{url_for('recipes')}}">Search Recipe</a>
 
-      {% endif %}
+            {% else %}
+              <a class="dropdown-item" href="{{url_for('browse_recipe')}}">Browse Recipes</a>
+              <a class="dropdown-item" href="{{url_for('recipe_detail')}}">Recipe Detail</a>
+              <a class="dropdown-item" href="{{url_for('recipes')}}">Search Recipe</a>
+
+            {% endif %}
     
             </div>
           </li>
@@ -42,11 +43,11 @@
           <li class="nav-item active">
             <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
           </li>
-      {% else %}
+          {% else %}
           <li class="nav-item active">
             <a class="nav-link" href="{{ url_for('login') }}">Login</a>
           </li>
-      {% endif %}
+          {% endif %}
         </ul>
       </div>
     </div>

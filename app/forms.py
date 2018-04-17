@@ -1,5 +1,5 @@
 from wtforms import StringField, PasswordField, FormField, IntegerField, SubmitField,SelectField,TextAreaField,FieldList, SelectMultipleField
-from wtforms.validators import Required, Length, Email, EqualTo, DataRequired
+from wtforms.validators import Required, Length, Email, EqualTo, DataRequired, Optional
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField,FileAllowed,FileRequired
 
@@ -15,25 +15,8 @@ class reg_Form(FlaskForm):
     password =  PasswordField('Password',validators=[Required()])
     conf_password= PasswordField('Re-enter password',validators=[Required(),EqualTo('password',message=('Passwords must Match'))])
     phone = StringField('Phone',validators=[DataRequired('Enter phone number')])
-    diet =SelectField('Diet',choices=[('S','Select Diet'),('A','Atkins'),('N','Normal'), ('V','Vegetarian'),('V2','Vegan')],validators=[DataRequired('Entered preferred diet')])
+    diet =SelectField('Diet',choices=[('S','Select Diet'),('Atkins','Atkins'),('Normal','Normal'), ('Vegetarian','Vegetarian'),('Vegan','Vegan')],validators=[DataRequired('Enter preferred diet')])
     health_info = TextAreaField('Health Information',validators=[DataRequired('Enter your medical information')])
-    submit=SubmitField("Submit")
-
-class instruction_Form(FlaskForm):
-    instruction1=StringField('Step 1',validators=[Required()])
-    instruction2=StringField('Step 2',validators=[Required()])
-    instruction3=StringField('Step 3')
-    instruction4=StringField('Step 4')
-
-class recipe_Form(FlaskForm):  
-    name = StringField("Recipe Name",validators=[Required()])
-    calorie = StringField("Calories",validators=[Required()])
-    servings = StringField("Serving",validators=[Required()])
-    prep_time = StringField("Preparation Time",validators=[Required()])
-    cook_time = StringField("Cook Time",validators=[Required()])
-    instructions = FieldList(FormField(instruction_Form), min_entries=1, validators=[Required()])
-    diet_type =SelectField('Diet',choices=[('S','Select Diet'),('A','Atkins'),('N','Normal'), ('V','Vegetarian'),('V2','Vegan')],validators=[DataRequired('Enter preferred diet')])
-    images = FileField('Upload image here', validators=[FileRequired(),FileAllowed(['jpg','png','jpeg'])])
     submit=SubmitField("Submit")
     
 class ingredient_Form(FlaskForm):
@@ -42,4 +25,17 @@ class ingredient_Form(FlaskForm):
     calories_per_unit =  IntegerField('calories_per_unit',validators=[Required()])
     quantity = IntegerField('quantity',validators=[Required()])
 
-
+class recipe_Form(FlaskForm):  
+    name = StringField("Recipe Name",validators=[DataRequired('Enter a recipe_name')])
+    calorie = IntegerField("Calories",validators=[DataRequired('Enter a calories')])
+    servings = IntegerField("Serving",validators=[DataRequired('Enter serving')])
+    prep_time = StringField("Preparation Time",validators=[DataRequired('Enter prep time')])
+    cook_time = StringField("Cook Time",validators=[DataRequired('Enter cook time')])
+    instruction1=StringField('Step 1',validators=[DataRequired('Enter step 1')])
+    instruction2=StringField('Step 2',validators=[DataRequired('Enter step 2')])
+    instruction3=StringField('Step 3',validators=[Optional()])
+    instruction4=StringField('Step 4',validators=[Optional()])    
+    diet_type =SelectField('Diet',choices=[('S','Select Diet'),('Atkins','Atkins'),('Normal','Normal'), ('Vegetarian','Vegetarian'),('Vegan','Vegan')],validators=[DataRequired('Enter preferred diet')])
+    photo= FileField('images', validators=[FileRequired(),FileAllowed(['jpg','png','jpeg'], 'Only jpg,jpeg and png images can be uploaded')])
+    submit=SubmitField("Submit")
+    ingredients =SelectMultipleField('Ingredients',choices=[('S','Select ingredients'),('Apple','Apple'),('Banana','Banana'), ('Chicken','Chicken'),('Egg','Egg'),('Flour','Flour')],validators=[DataRequired('Enter ingredients')])

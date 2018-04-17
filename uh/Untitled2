@@ -1,0 +1,35 @@
+            name=form.name.data
+            calorie=form.calorie.data
+            servings=form.servings.data
+            prep_time=form.prep_time.data
+            cook_time=form.cook_time.data
+            diet_type="Normal"
+            instruction1=form.instruction1.data
+            instruction2=form.instruction2.data
+            instruction3=form.instruction3.data
+            instruction4=form.instruction3.data
+            
+            
+            image=request.files['photo']
+            if allowed_file(image.filename):
+                filename=secure_filename(image.filename)
+                image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            else:
+                flash('Incorrect File Format','danger')
+                return redirect(url_for('profile'))
+                
+            try:
+               
+                insert_stmt = ("INSERT INTO Recipe(name,calorie,servings,cook_time,prep_time,diet_type) " "VALUES (%s, %d, %d, %s, %s, %s)")
+                data  = (name,int(calorie),int(servings),cook_time,prep_time,diet_type)
+                cursor = mysql.cursor()
+                cursor.execute(insert_stmt,data)
+                mysql.commit()
+                cursor.close()
+                flash('success')
+                return redirect(url_for('index'))
+            except Exception as e:
+                print e
+                db.session.rollback()
+                flash(str(e))
+                return render_template('add_recipe.html', error=error, form=form)

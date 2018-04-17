@@ -159,6 +159,33 @@ create table Consists(
     primary key(ingredients_id,measure_id)
 );
 
+Drop procedure if exists GetRecipes;
+DELIMITER //
+CREATE PROCEDURE GetRecipes(IN name VARCHAR(120))
+BEGIN (
+    SELECT * from Recipe WHERE Recipe.name LIKE name
+);
+END //
+DELIMITER ;
+
+Drop procedure if exists GetRecipeId;
+DELIMITER //
+CREATE PROCEDURE GetRecipeId(IN name VARCHAR(120))
+BEGIN (
+    SELECT recipe.recipe_id from Recipe WHERE Recipe.name LIKE name
+);
+END //
+DELIMITER ;
+
+Drop procedure if exists GetInstructionsId;
+DELIMITER //
+CREATE PROCEDURE GetInstructionsId(IN task VARCHAR(120))
+BEGIN (
+    SELECT Instructions.instruction_id from Instructions WHERE Instructions.task LIKE task
+);
+END //
+DELIMITER ;
+
 -- drop table if exists Address;
 -- create table Address(
 --     street_address varchar(255) not null,

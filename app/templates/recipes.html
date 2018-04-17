@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+  <div class="row"></div>
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col-md-6">
+				<div class="form-top">
+					<div class="form-top-left">
+						<h3>Search Recipe</h3>
+					</div>
+				</div>
+                <form action="{{ url_for('recipes') }}" method="post">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    {{form.name.label}}
+                                    {{form.name}}
+                                </div>
+                                <br />
+                                {{ form.submit(class="btn btn-default") }}
+                                <br />
+                            </div>
+                        </div> 
+                    </div>
+                </form>
+                <h1 class="title"><strong>Recipe</strong></h1>
+                {% for recipe in recipes %}
+                    <div class="row border-style center profile profiles-container">
+                            <div class="col pro-data">
+                                <span class="name">name: {{recipe[1]}}</span></br>
+                                <span class="name">prep time: {{recipe[6]}}</span></br>
+                                <span class="name">cook time: {{recipe[5]}}</span>
+                            </div>
+                        <div class="view-profile center col bio">
+                            </br>
+                            <a class="view-btn btn-recipe" href="{{ url_for('recipe_detail', recipeid=recipe[0]) }}">View Recipe</a>
+                        </div>
+                    </div>
+                {% endfor %}
+             </div>
+          </div>
+{% endblock %}

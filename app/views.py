@@ -3,7 +3,7 @@ import time
 from app import app,login_manager, mysql
 from flask import Flask, abort, request, jsonify, url_for, render_template, redirect, flash
 from flask_login import login_user, logout_user, current_user, login_required
-from forms import login_Form,reg_Form,recipe_Form,ingredient_Form,instruction_Form
+from forms import login_Form,reg_Form,recipe_Form,ingredient_Form
 from models import User
 from werkzeug.utils import secure_filename
 from . import db
@@ -113,6 +113,148 @@ def register():
     else:
         return render_template('register.html', form=form)
 
+@app.route("/add_recipe",methods=['GET','POST'])
+@login_required
+def add_recipe():
+    error=None
+    form = recipe_Form()
+    if request.method == 'POST':   
+        if form.validate_on_submit():
+            name=form.name.data
+            calorie=form.calorie.data
+            servings=form.servings.data
+            prep_time=form.prep_time.data
+            cook_time=form.cook_time.data
+            diet_type="Normal"
+            instruction1=form.instruction1.data
+            instruction2=form.instruction2.data
+            instruction3=form.instruction3.data
+            instruction4=form.instruction3.data
+            
+            
+            image=request.files['photo']
+            if allowed_file(image.filename):
+                filename=secure_filename(image.filename)
+                image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            else:
+                flash('Incorrect File Format','danger')
+                return redirect(url_for('profile'))
+                
+            insert_stmt = ("INSERT INTO Recipe(name,calorie,servings,cook_time,prep_time,diet_type) " "VALUES (%s, %s, %s, %s, %s, %s)")
+            data  = (name,calorie,servings,cook_time,prep_time,diet_type)
+            cursor = mysql.cursor()
+            cursor.execute(insert_stmt,data)
+            mysql.commit()
+            cursor.close()
+            
+            insertinstructions(name,instruction1,instruction2,instruction3,instruction4)
+        
+            flash('success')
+            return redirect(url_for('recipes'))
+        else:
+            flash('Error entering')
+            render_template('add_recipe.html' , error=error, form=form)
+    else:
+        return render_template('add_recipe.html', form=form)
+
+def insertinstructions(name,instruction1,instruction2,instruction3,instruction4):
+    cursor = mysql.cursor()
+    cursor.callproc("GetRecipeId",[str(name)])
+    result = cursor.fetchall()
+    cursor.close()
+
+    
+    mysql.commit()
+    recipes = []
+    instructions=[]
+    for row in result:
+        recipes.append(row)
+    
+    cursor = mysql.cursor()
+    insert_stmt = ("INSERT INTO Instructions(task,order) " "VALUES (%s, %s)")
+    data  = (instruction1,"1")
+    cursor.execute(insert_stmt,data)
+    insert_stmt = ("INSERT INTO Instructions(task,order) " "VALUES (%s, %s)")
+    data  = (instruction2,"2")
+    cursor.execute(insert_stmt,data)
+    insert_stmt = ("INSERT INTO Instructions(task,order) " "VALUES (%s, %s)")
+    data  = (instruction3,"3")
+    cursor.execute(insert_stmt,data)
+    insert_stmt = ("INSERT INTO Instructions(task,order) " "VALUES (%s, %s)")
+    data  = (instruction4,"4")
+    cursor.execute(insert_stmt,data)
+   
+   
+    
+    mysql.commit()
+    cursor.close()
+    
+    cursor = mysql.cursor()
+    cursor.callproc("GetInstructionsId",[str(instruction1)])
+    result_1 = cursor.fetchall()
+    cursor.close()
+    cursor = mysql.cursor()
+    cursor.callproc("GetInstructionsId",[str(instruction2)])
+    result_2 = cursor.fetchall()
+    cursor.close()
+    cursor = mysql.cursor()
+    cursor.callproc("GetInstructionsId",[str(instruction3)])
+    result_3 = cursor.fetchall()
+    cursor.close()
+    cursor = mysql.cursor()
+    cursor.callproc("GetInstructionsId",[str(instruction4)])
+    result_4 = cursor.fetchall()
+    cursor.close()
+    instructions=[]
+    
+    for row in result_1:
+        instructions.append(row)
+    for row in result_2:
+        instructions.append(row)
+    for row in result_3:
+        instructions.append(row)
+    for row in result_4:
+        instructions.append(row)    
+    #insert_stmt = ("INSERT INTO Outlines(recipe_id,instructions_id) " "VALUES (%s, %s)")
+    #data  = (result[0],instructions[0])
+    
+
+@app.route('/recipes', methods=["GET","POST"])
+def recipes():
+    cursor = mysql.cursor()
+    form = recipe_Form(request.form)
+    cursor.callproc("GetRecipes",[str(form.name.data)])
+    result = cursor.fetchall()
+    cursor.close()
+
+    mysql.commit()
+    recipes = []
+    for row in result:
+        recipes.append(row)
+    print recipes
+    if request.method == 'POST':
+        if result is not None:
+            return render_template("recipes.html", form=form, recipes=recipes)
+    else:
+        return render_template("recipes.html",form=form)
+        
+# @app.route('/recipe_details/<recipeid>',methods=["GET"])
+# def recipe_details(recipeid):
+#     cursor = mysql.cursor()
+#     cursor.callproc("GetRecipeById",[str(recipeid)])
+#     result = cursor.fetchall()
+#     cursor.close()
+#     cursor = mysql.cursor()
+
+#     cursor.close()
+#     connection.commit()
+   
+#     recipes = []
+#     for row in result:
+#         recipes.append(row)
+    
+#     return render_template("recipe.html",recipes=recipes)
+    
 @app.route('/logout')
 @login_required
 def logout():
@@ -130,58 +272,6 @@ def insert_profile(first_name, user_name, last_name, email, phone, diet , health
     cursor.execute(insert_stmt,data)
     mysql.commit()
     cursor.close()
-    
-@app.route('/add_recipe', methods=['GET' , 'POST'])
-@login_required
-def add_recipe():
-    form =recipe_Form()
-    error=None
-    print (form)
-    if request.method == 'POST' :
-        if form.validate_on_submit():
-            recipe_name = form.recipe_name.data
-            calorie = int(form.calorie.data)
-            servings = int(form.servings.data)
-            prep_time = form.prep_time.data
-            cook_time = form.cook_time.data
-            steps = form.instructions.data
-            diet_type =form.diet_type.data
-            images=request.files['images']
-            if allowed_file(images.filename):
-                filename=secure_filename(images.filename)
-                images.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            else:
-                flash('Incorrect File Format','danger')
-                return redirect(url_for('profile'))
-            
-            instruction1 = steps[0]['instruction1']
-            instruction2 = steps[0]['instruction2']
-            instruction3 = steps[0]['instruction3']
-            instruction4 = steps[0]['instruction4']
-            instruction5 = steps[0]['instruction5']
-            
-            try:
-               
-                insert_stmt = ("INSERT INTO Recipe(name,calorie,servings,prep_time,cook_time,diet_type) " "VALUES (%s, %d, %d, %s, %s, %s)")
-                data  = (recipe_name,calorie,servings,prep_time,cook_time,diet_type)
-                cursor = mysql.cursor()
-                cursor.execute(insert_stmt,data)
-                mysql.commit()
-                cursor.close()
-
-                flash('success')
-                return redirect(url_for('index'))
-            except Exception as e:
-                print e
-                db.session.rollback()
-                flash(str(e))
-                return render_template('add_recipe.html',error=error,form=form)
-        else:
-            flash('Error adding recipe')
-            return render_template('add_recipe.html',error=error,form=form)
-    else:
-            flash('Error posting')
-            return render_template('add_recipe.html',error=error,form=form)
 
 def allowed_file(filename):
     return '.' in filename and \

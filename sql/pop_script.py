@@ -1,9 +1,10 @@
 from pathlib import Path
 from random import randint, choice
 from future import print_function
+
 ingredients_count = 4 #This is the number of ingredients in each recipe
 instructions_count = 4 #This is the number of instructions in each recipe
-num_users = 3 #This is the number of users. I used this in meal_plan and contructs
+num_users = 100000 #This is the number of users. I used this in meal_plan and contructs
 num_meal_plans = 4 * num_users #This is the number of meal plans for each user
 
 def generate_db():
@@ -51,6 +52,27 @@ def generate_db():
     insert_consists()
     insert_provide()
 
+def generate_recipes(num_recipe):
+    file_path = Path("recipe.txt")
+    file = open(file_path,"w")
+    for count in range(0,num_recipe):
+        file.write(gen_ran_text(randint(8,16)).capitalize()+"\n")
+    file.close()
+
+def generate_users(num_user):
+    file_path = Path("user.txt")
+    file = open(file_path,"w")
+    for count in range(0,num_user):
+        file.write(gen_ran_text(randint(5,10)).capitalize()+" "+gen_ran_text(randint(5,10)).capitalize()+"\n")
+    file.close()
+
+def generate_meals(num_meals):
+    file_path = Path("meal.txt")
+    file = open(file_path,"w")
+    for count in range(0,num_meals):
+        file.write(gen_ran_text(randint(4,10)).capitalize()+"\n")
+    file.close()
+
 def get_data(file_name):
     file = open(file_name,"r")
     data = []
@@ -58,6 +80,15 @@ def get_data(file_name):
         data.append(line[:-1])
     file.close()
     return data
+
+def ran_phone():
+    result = ""
+    for count in range(0,8):
+        if count == 3:
+            result += "-"
+        else:
+            result += str(randint(1,9))
+    return result
 
 def insert_ingredients():
     ingredients = get_data("ingredients.txt")
@@ -109,23 +140,28 @@ def insert_provide():
         file.close()
 
 def insert_recipe():
-    recipes = get_data("recipe.txt")
-    file_path = Path("schema.sql")
-    diets = get_data("diet.txt")
-    if not file_path.is_file():
-        file = open("schema.sql","w")
-        for index in range(0,len(recipes)):
-            sql_line = "insert into Recipe(name, calorie, servings, cook_time, prep_time, diet_type) "
-            sql_line+="values("+'"'+recipes[index]+'"'+","+str(randint(0,100))+","+str(randint(0,100))+","+str(randint(0,60))+","+str(randint(0,60))+","+'"'+choice(diets)+'"'+");\n"
-            file.write(sql_line)
-        file.close()
+    recipe_path = Path("recipe.txt")
+    if recipe_path.is_file():
+        file_path = Path("schema.sql")
+        diets = get_data("diet.txt")
+        if not file_path.is_file():
+            file = open("schema.sql","w")
+            recipe_file = open(recipe_path,"r")
+            for line in recipe_file:
+                sql_line = "insert into Recipe(name, calorie, servings, cook_time, prep_time, diet_type) "
+                sql_line+="values("+'"'+line[:-1]+'"'+","+str(randint(0,100))+","+str(randint(0,100))+","+str(randint(0,60))+","+str(randint(0,60))+","+'"'+choice(diets)+'"'+");\n"
+                file.write(sql_line)
+            file.close()
+        else:
+            file = open("schema.sql","a")
+            recipe_file = open(recipe_path,"r")
+            for line in recipe_file:
+                sql_line = "insert into Recipe(name, calorie, servings, cook_time, prep_time, diet_type) "
+                sql_line+="values("+'"'+line[:-1]+'"'+","+str(randint(0,100))+","+str(randint(0,100))+","+str(randint(0,60))+","+str(randint(0,60))+","+'"'+choice(diets)+'"'+");\n"
+                file.write(sql_line)
+            file.close()
     else:
-        file = open("schema.sql","a")
-        for index in range(0,len(recipes)):
-            sql_line = "insert into Recipe(name, calorie, servings, cook_time, prep_time, diet_type) "
-            sql_line+="values("+'"'+recipes[index]+'"'+","+str(randint(0,1000))+","+str(randint(0,100))+","+str(randint(0,60))+","+str(randint(0,60))+","+'"'+choice(diets)+'"'+");\n"
-            file.write(sql_line)
-        file.close()
+        print("File was not found")  
 
 def insert_contains():
     recipe_num = num_records("recipe.txt")
@@ -394,6 +430,8 @@ def insert_user():
 
 def insert_profile():
     user_path = Path("user.txt")
+    email_provide = ["@hotmail.com","@yahoo.com","@gmail.com","@outlook.com"] #You can add more if you like
+    health = get_data("heath_info.txt")
     if user_path.is_file():
         user_file = open("user.txt","r")
         file_path = Path("schema.sql")
@@ -404,8 +442,8 @@ def insert_profile():
                 name = line.split(" ")
                 name[1] = name[1][:-1]
                 sql_line = "insert into Profile(first_name, user_name, last_name, email, phone, diet, health_info) "
-                sql_line +="values("+'"'+name[0]+'"'+", "+'"'+name[0]+"."+name[1]+'"'+", "+'"'+name[1]+'"'+", "+'"'+"None"+'"'+", "+'"'+"None"+'"'
-                sql_line +=", "+'"'+choice(diets)+'"'+", "+'"'+"None"+'"'+");\n"
+                sql_line +="values("+'"'+name[0]+'"'+", "+'"'+name[0]+"."+name[1]+'"'+", "+'"'+name[1]+'"'+", "+'"'+name[0]+"."+name[1]+choice(email_provide)+'"'+", "+'"'+ran_phone()+'"'
+                sql_line +=", "+'"'+choice(diets)+'"'+", "+'"'+choice(health)+'"'+");\n"
                 file.write(sql_line)
             file.close()
             user_file.close()
@@ -416,8 +454,8 @@ def insert_profile():
                 name = line.split(" ")
                 name[1] = name[1][:-1]
                 sql_line = "insert into Profile(first_name, user_name, last_name, email, phone, diet, health_info) "
-                sql_line +="values("+'"'+name[0]+'"'+", "+'"'+name[0]+"."+name[1]+'"'+", "+'"'+name[1]+'"'+", "+'"'+"None"+'"'+", "+'"'+"None"+'"'
-                sql_line +=", "+'"'+choice(diets)+'"'+", "+'"'+"None"+'"'+");\n"
+                sql_line +="values("+'"'+name[0]+'"'+", "+'"'+name[0]+"."+name[1]+'"'+", "+'"'+name[1]+'"'+", "+'"'+name[0]+"."+name[1]+choice(email_provide)+'"'+", "+'"'+ran_phone()+'"'
+                sql_line +=", "+'"'+choice(diets)+'"'+", "+'"'+choice(health)+'"'+");\n"
                 file.write(sql_line)
             file.close()
             user_file.close()
@@ -455,20 +493,29 @@ def insert_kitchen():
 def insert_stores():
     ingredients_num = num_records("ingredients.txt")
     file_path = Path("schema.sql")
+    user_path = Path("user.txt")
     if not file_path.is_file():
-        file = open("schema.sql","w")
-        for index in range(0,num_users):
-            sql_line = "insert into Stores(kitchen_id, ingredients_id, quantity) "
-            sql_line += "values("+str((index+1))+", "+str(randint(1,ingredients_num))+", "+str(randint(1,50))+");\n"
-            file.write(sql_line)
-        file.close()
+        if not user_path.is_file():
+            print("File not found")
+        else:
+            file = open("schema.sql","w")
+            user_num = num_records("user.txt")
+            for index in range(0,user_num):
+                sql_line = "insert into Stores(kitchen_id, ingredients_id, quantity) "
+                sql_line += "values("+str((index+1))+", "+str(randint(1,ingredients_num))+", "+str(randint(1,50))+");\n"
+                file.write(sql_line)
+            file.close()
     else:
-        file = open("schema.sql","a")
-        for index in range(0,num_users):
-            sql_line = "insert into Stores(kitchen_id, ingredients_id, quantity) "
-            sql_line += "values("+str((index+1))+", "+str(randint(1,ingredients_num))+", "+str(randint(1,50))+");\n"
-            file.write(sql_line)
-        file.close()
+        if not user_path.is_file():
+            print("File not found")
+        else:
+            file = open("schema.sql","a")
+            user_num = num_records("user.txt")
+            for index in range(0,user_num):
+                sql_line = "insert into Stores(kitchen_id, ingredients_id, quantity) "
+                sql_line += "values("+str((index+1))+", "+str(randint(1,ingredients_num))+", "+str(randint(1,50))+");\n"
+                file.write(sql_line)
+            file.close()
 
 def generate_date():
     #This generates a random date
@@ -545,66 +592,79 @@ def insert_address():
 
 def insert_located_at():
     user_path = Path("user.txt")
-    if user_path.is_file():
+    address_path = Path("address.txt")
+    if user_path.is_file() and address_path.is_file():
         user_file = open("user.txt","r")
+        address_file = open(address_path,"r")
         file_path = Path("schema.sql")
         if not file_path.is_file():
             file = open("schema.sql","w")
             for line in user_file:
                 name = line.split(" ")
                 name[1] = name[1][:-1]
+                street_address = address_file.readline().split(",")[0]
                 sql_line = "insert into Located_at(user_name, street_address) "
-                sql_line += "values("+'"'+name[0]+"."+name[1]+'"'+", "+'"'+gen_ran_text(25)+'"'+");\n"
+                sql_line += "values("+'"'+name[0]+"."+name[1]+'"'+", "+'"'+street_address+'"'+");\n"
                 file.write(sql_line)
             file.close()
             user_file.close()
+            address_file.close()
         else:
-            file = open("schema.sql","a")
+            file = open("schema.sql","w")
             for line in user_file:
                 name = line.split(" ")
                 name[1] = name[1][:-1]
+                street_address = address_file.readline().split(",")[0]
                 sql_line = "insert into Located_at(user_name, street_address) "
-                sql_line += "values("+'"'+name[0]+"."+name[1]+'"'+", "+'"'+gen_ran_text(25)+'"'+");\n"
+                sql_line += "values("+'"'+name[0]+"."+name[1]+'"'+", "+'"'+street_address+'"'+");\n"
                 file.write(sql_line)
             file.close()
             user_file.close()
+            address_file.close()
+    else:
+        print("File not found")
 def insert_uploads():
     user_path = Path("user.txt")
-    counter = 1
+    recipe_count = 1
+    counter = 0
     if user_path.is_file():
         user_file = open("user.txt", "r")
         file_path = Path("schema.sql")
         if not file_path.is_file():
             file = open("schema.sql","w")
             recipe_num = num_records("recipe.txt")
+            user_num = num_records("user.txt")
+            recipe_user_ratio = recipe_num // user_num
+            if recipe_user_ratio == 0:
+                recipe_user_ratio = 1
             for line in user_file:
                 name = line.split(" ")
                 name[1] = name[1][:-1]
-                sql_line = "insert into Uploads(user_name, recipe_id) "
-                if counter < recipe_num:
-                    sql_line +="values("+'"'+name[0]+"."+name[1]+'"'+","+str(counter)+","+'"'+generate_date()+'"'+");\n"
+                while counter < recipe_user_ratio:
+                    sql_line = "insert into Uploads(user_name, recipe_id) "
+                    sql_line +="values("+'"'+name[0]+"."+name[1]+'"'+","+str(recipe_count)+","+'"'+generate_date()+'"'+");\n"
+                    file.write(sql_line)
                     counter += 1
-                else:
-                    counter = 1
-                    sql_line +="values("+'"'+name[0]+"."+name[1]+'"'+","+str(counter)+","+'"'+generate_date()+'"'+");\n"
-                    counter += 1
-                file.write(sql_line)
+                    recipe_count += 1
+                counter = 0
             file.close()
         else:
             file = open("schema.sql","a")
             recipe_num = num_records("recipe.txt")
+            user_num = num_records("user.txt")
+            recipe_user_ratio = recipe_num // user_num
+            if recipe_user_ratio == 0:
+                recipe_user_ratio = 1
             for line in user_file:
                 name = line.split(" ")
                 name[1] = name[1][:-1]
-                sql_line = "insert into Uploads(user_name, recipe_id) "
-                if counter < recipe_num:
-                    sql_line +="values("+'"'+name[0]+"."+name[1]+'"'+","+str(counter)+","+'"'+generate_date()+'"'+");\n"
+                while counter < recipe_user_ratio:
+                    sql_line = "insert into Uploads(user_name, recipe_id) "
+                    sql_line +="values("+'"'+name[0]+"."+name[1]+'"'+","+str(recipe_count)+","+'"'+generate_date()+'"'+");\n"
+                    file.write(sql_line)
                     counter += 1
-                else:
-                    counter = 1
-                    sql_line +="values("+'"'+name[0]+"."+name[1]+'"'+","+str(counter)+","+'"'+generate_date()+'"'+");\n"
-                    counter += 1
-                file.write(sql_line)
+                    recipe_count += 1
+                counter = 0
             file.close()
     else:
         print("File could not be found")
