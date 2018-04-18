@@ -82,7 +82,7 @@ create table Instructions(
     recipe_id int not null,
     task varchar(255) not null,
     instruction_order int not null,
-    foreign key Instructions(recipe_id) references Recipe(recipe_id) on delete cascade on update cascade,
+    foreign key (recipe_id) references Recipe(recipe_id) on delete cascade on update cascade,
     primary key(instruction_id,recipe_id)
 );
 
@@ -223,46 +223,67 @@ BEGIN (
 END //
 DELIMITER ;
 
--- drop table if exists Address;
--- create table Address(
---     street_address varchar(255) not null,
---     city varchar(50),
---     zip_code varchar(20),
---     country varchar(50),
---     primary key(street_address)
--- );
 
--- drop table if exists Located_at;
--- create table Located_at(
---     user_name varchar(100) not null,
---     street_address varchar(255) not null,
---     foreign key(user_name) references User(user_name) on delete cascade on update cascade,
---     foreign key(street_address) references Address(street_address) on delete cascade on update cascade,
---     primary key(user_name, street_address)
--- );
+Drop procedure if exists GetDate;
+DELIMITER //
+CREATE PROCEDURE GetDate(IN id int)
+BEGIN (
+    SELECT upload_date from Uploads WHERE Uploads.recipe_id=id
+);
+END //
+DELIMITER ;
 
--- drop table if exists Nutrition;
--- create table Nutrition(
---     nutrition_id int auto_increment not null,
---     name varchar(100) not null,
---     primary key(nutrition_id)
--- );
+Drop procedure if exists GetMealPlan;
+DELIMITER //
+CREATE PROCEDURE GetMealPlan()
+BEGIN (
+    SELECT * from Meal_plan
+);
+END //
+DELIMITER ;
+
+/*
+drop table if exists Address;
+create table Address(
+    street_address varchar(255) not null,
+    city varchar(50),
+    zip_code varchar(20),
+    country varchar(50),
+    primary key(street_address)
+);
+
+drop table if exists Located_at;
+create table Located_at(
+    user_name varchar(100) not null,
+    street_address varchar(255) not null,
+    foreign key(user_name) references User(user_name) on delete cascade on update cascade,
+    foreign key(street_address) references Address(street_address) on delete cascade on update cascade,
+    primary key(user_name, street_address)
+);
+
+drop table if exists Nutrition;
+create table Nutrition(
+    nutrition_id int auto_increment not null,
+    name varchar(100) not null,
+    primary key(nutrition_id)
+);
 
 
--- drop table if exists Provide;
--- create table Provide(
---     ingredients_id int,
---     nutrition_id int,
---     foreign key(ingredients_id) references Ingredients(ingredients_id) on delete cascade on update cascade,
---     foreign key(nutrition_id) references Nutrition(nutrition_id) on delete cascade on update cascade,
---     primary key(ingredients_id,nutrition_id)
--- );
+drop table if exists Provide;
+create table Provide(
+    ingredients_id int,
+    nutrition_id int,
+    foreign key(ingredients_id) references Ingredients(ingredients_id) on delete cascade on update cascade,
+    foreign key(nutrition_id) references Nutrition(nutrition_id) on delete cascade on update cascade,
+    primary key(ingredients_id,nutrition_id)
+);python
 
--- drop table if exists Outlines;
--- create table Outlines(
---     recipe_id int not null,
---     instruction_id int not null,
---     foreign key(recipe_id) references Recipe(recipe_id) on delete cascade on update cascade,
---     foreign key(instruction_id) references Instructions(instruction_id) on delete cascade on update cascade,
---     primary key(recipe_id,instruction_id)
--- );
+drop table if exists Outlines;
+create table Outlines(
+    recipe_id int not null,
+    instruction_id int not null,
+    foreign key(recipe_id) references Recipe(recipe_id) on delete cascade on update cascade,
+    foreign key(instruction_id) references Instructions(instruction_id) on delete cascade on update cascade,
+      primary key(recipe_id,instruction_id)
+);
+*/

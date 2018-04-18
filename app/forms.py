@@ -37,6 +37,7 @@ class recipe_Form(FlaskForm):
     instruction3=StringField('Step 3',validators=[Optional()])
     instruction4=StringField('Step 4',validators=[Optional()])    
     diet_type =SelectField('Diet',choices=[('S','Select Diet'),('Atkins','Atkins'),('Normal','Normal'), ('Vegetarian','Vegetarian'),('Vegan','Vegan')],validators=[DataRequired('Enter preferred diet')])
+    # health_info = StringField('Health',validators=[DataRequired('Enter your health information')])
     photo= FileField('images', validators=[FileRequired(),FileAllowed(['jpg','png','jpeg'], 'Only jpg,jpeg and png images can be uploaded')])
     submit=SubmitField("Submit")
     cursor = mysql.cursor()

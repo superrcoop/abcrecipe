@@ -51,7 +51,7 @@ def login():
                 else:
                     user = User(result[0][0], result[0][1])
                     login_user(user)
-                    flash('success')
+                    #flash('success')
                     return redirect(url_for('index'))
             except Exception as e:
                 return str(e)
@@ -74,10 +74,10 @@ def register():
             password = form.password.data
             conf_password =form.conf_password.data
             phone = form.phone.data
-            # diet=form.diet.data
+            diet=form.diet.data
             # health_info=form.health_info.data
-            diet="Normal"
-            health_info="Good"
+            #diet="Normal"
+            health_info=form.health_info.data
             try:
                
                 insert_stmt = ("INSERT INTO User(user_name, hash_password) " "VALUES (%s, %s)")
@@ -94,12 +94,15 @@ def register():
                     db.session.rollback()
                     flash(str(e))
                     return render_template('register.html', error=error, form=form)
-                
+                try:
+                    #insert_kitchen(user_name)
+                    pass
+                except Exception as e:
+                    print e
+                    db.session.rollback()
+                    flash(str(e))
+                    return render_template('register.html', error=error, form=form)
                 user = User(user_name=user_name,hash_password=password)
-                db.session.add(user)
-                db.session.commit()
-
-                flash('success')
                 login_user(user)
                 return redirect(url_for('index'))
             except Exception as e:
@@ -113,6 +116,18 @@ def register():
     else:
         return render_template('register.html', form=form)
 
+@app.route("/meal_plan",methods=['GET','POST'])
+@login_required
+def meal_plan():
+    return render_template('meal_plan.html')
+    
+    
+@app.route("/shoppinglist",methods=['GET','POST'])
+@login_required
+def shoppinglist():
+    return render_template('shoppinglist.html')
+
+
 @app.route("/add_recipe",methods=['GET','POST'])
 @login_required
 def add_recipe():
@@ -125,7 +140,8 @@ def add_recipe():
             servings=form.servings.data
             prep_time=form.prep_time.data
             cook_time=form.cook_time.data
-            diet_type="Normal"
+            #diet_type="Normal"
+            diet_type = form.diet_type.data
             instruction1=form.instruction1.data
             instruction2=form.instruction2.data
             instruction3=form.instruction3.data
@@ -145,6 +161,10 @@ def add_recipe():
             data  = (name,calorie,servings,cook_time,prep_time,diet_type)
             cursor = mysql.cursor()
             cursor.execute(insert_stmt,data)
+            
+            insert_date(current_user.user_name, name)
+            
+            
             mysql.commit()
             cursor.close()
                 
@@ -158,13 +178,34 @@ def add_recipe():
             flash('success')
             return redirect(url_for('recipes'))
         else:
-            ingredients=form.ingredients.data
-            flash(ingredients)
-            flash(len(ingredients))
+            flash(form.errors)
             flash('Error entering')
             render_template('add_recipe.html' , error=error, form=form)
     
     return render_template('add_recipe.html', form=form)
+
+def insert_date(user,name):
+    cursor = mysql.cursor()
+    cursor.callproc("GetRecipeId",[str(name)])
+    result = cursor.fetchall()
+    cursor.close()
+    mysql.commit()
+    recipes = []
+    for row in result:
+        recipes.append(row)
+        
+    insert_stmt = ("INSERT INTO Uploads(user_name,recipe_id,upload_date) " "VALUES (%s, %s, NOW())")
+    data  = (user,recipes[0])
+    cursor = mysql.cursor()
+    cursor.execute(insert_stmt,data)
+            
+def insert_kitchen(user_name):
+    insert_stmt = ("INSERT INTO Kitchen(user_name) " "VALUES (%s)")
+    data = (str(user_name))
+    cursor = mysql.cursor()
+    cursor.execute(insert_stmt,data)
+    mysql.commit()
+    cursor.close()
 
 def insertinstructions(name,instruction1,instruction2,instruction3,instruction4):
     
@@ -324,6 +365,12 @@ def recipe_details(recipeid):
     result_3 = cursor.fetchall()
     cursor.close()
     
+    cursor = mysql.cursor()
+    cursor.callproc("GetDate",[str(recipeid)])
+    result_5 = cursor.fetchall()
+    cursor.close()
+    
+    date=[]
     recipes = []
     ingredients=[]
     instructions=[]
@@ -337,6 +384,9 @@ def recipe_details(recipeid):
     for row in result_2:
         ingredients.append(row)
         
+    for row in result_5:
+        date.append(row)
+        
     for i in range(0,len(ingredients)):
         cursor = mysql.cursor()
         cursor.callproc("GetIngredientsInfo",[str(ingredients[i][0])])
@@ -344,9 +394,10 @@ def recipe_details(recipeid):
         cursor.close()
         for row in result_4:
             ingredient_name.append(row)
-    flash(ingredient_name)       
-    print(ingredient_name)
-    return render_template("recipe_detail.html",recipes=recipes,instructions=instructions,ingredient_name=ingredient_name,imagenames=imagenames)
+    
+    # print instructions
+    
+    return render_template("recipe_detail.html",recipes=recipes,instructions=instructions,ingredient_name=ingredient_name,imagenames=imagenames,date=date)
     
 @app.route('/logout')
 @login_required

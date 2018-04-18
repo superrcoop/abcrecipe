@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+
+  <!-- Top Recipes -->
+  <div class="top">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <h5><i class="fa fa-cutlery" aria-hidden="true"></i> Top Breakfast Recipes</h5>
+          <div class="box clearfix">
+            <a href="{{url_for('recipe_detail')}}">
+              <img src="{{ url_for('static', filename='../static/images/square-recipes1.jpg') }}" alt="">
+            <h3>Cinnamon Baked Doughnuts</h3>
+            <p>Lorem ipsum dolor sit amet, adipiscing elit...</p>
+          </a>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <h5><i class="fa fa-cutlery" aria-hidden="true"></i> Top Lunch Recipes</h5>
+          <div class="box clearfix">
+            <a href="{{url_for('recipe_detail')}}">
+              <img src="{{ url_for('static', filename='../static/images/square-recipes2.jpg')}}" alt="">
+            <h3>Fruit Mix With Lemon Gravy</h3>
+            <p>Lorem ipsum dolor sit amet, adipiscing elit...</p>
+          </a>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <h5><i class="fa fa-cutlery" aria-hidden="true"></i> Top Dinner Recipes</h5>
+          <div class="box clearfix">
+            <a href="{{url_for('recipe_detail')}}">
+              <img src="{{ url_for('static', filename='../static/images/square-recipes3.jpg')}}" alt="">
+            
+            <h3>Red Cilly Sauce Cheese</h3>
+            <p>Lorem ipsum dolor sit amet, adipiscing elit...</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Recipes-->
+  <div class="featured">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <h4>Oct 30, 2017</h4>
+          <h3>Recipes of the day</h3>
+        </div>
+        <div class="col-lg-8">
+          <div class="box grid recipes">
+            <a href="{{url_for('recipe_detail')}}">
+              <img src="{{ url_for('static', filename='../static/images/recipe1.jpg')}}" alt="">
+            </a>
+            <h2><a href="{{url_for('recipe_detail')}}">Roast Chicken With Lemon Gravy</a></h2>
+            <p>Dapibus mattis a. Nec lacus nam. Volutpat molestie ipsum. Eu et fermentum malesuada et et lorem mauris aenean partur..</p>
+            <div class="tag">
+              <a href="#">Chicken</a>
+              <a href="#">Lemon</a>
+              <a href="#">Sayur</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- List Recipes -->
+
+  <!-- List Recipes -->
+  <div class="list">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h5><i class="fa fa-cutlery" aria-hidden="true"></i>  List Recipes</h5>
+        </div>
+
+        <div class="col-lg-4 col-sm-6">
+          <div class="box grid recipes">
+            <a href="{{url_for('recipe_detail')}}">
+              <img src="{{ url_for('static', filename='../static/images/recipe2.jpg')}}" alt="">
+            </a>
+            <h2><a href="{{url_for('recipe_detail')}}">Milk fruit fresh with vegetables </a></h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <div class="tag">
+              <a href="#">Milk</a>
+              <a href="#">Lemon</a>
+              <a href="#">Sayur</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-sm-6">
+          <div class="box grid recipes">
+            <a href="{{url_for('recipe_detail')}}">
+              <img src="{{ url_for('static', filename='../static/images/recipe3.jpg')}}" alt="">
+            </a>
+            <h2><a href="{{url_for('recipe_detail')}}">Pink Happy Pia Chocolate Sweet</a></h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+            <div class="tag">
+              <a href="#">Chocolate</a>
+              <a href="#">Lemon</a>
+              <a href="#">Sayur</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-sm-6">
+          <div class="box grid recipes">
+            <a href="{{url_for('recipe_detail')}}">
+              <img src="{{ url_for('static', filename='../static/images/recipe4.jpg')}}" alt="">
+            </a>
+            <h2><a href="{{url_for('recipe_detail')}}">Tasty Muffin Sweet Tin Lunches</a></h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+            <div class="tag">
+              <a href="#">Muffin</a>
+              <a href="#">Lemon</a>
+              <a href="#">Sayur</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   
+
+{% endblock %}
