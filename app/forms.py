@@ -33,3 +33,24 @@ class recipe_Form(FlaskForm):
     diet_type =SelectField('Diet',choices=[('S','Select Diet'),('Atkins','Atkins'),('Normal','Normal'), ('Vegetarian','Vegetarian'),('Vegan','Vegan')],validators=[DataRequired('Enter preferred diet')])
     photo = FileField('files[]', validators=[FileRequired(),FileAllowed(ALLOWED_EXTENSIONS, 'File not allowed')])
     ingredients =SelectMultipleField('Ingredients',choices=[('S','Select ingredients'),('Apple','Apple'),('Banana','Banana'), ('Chicken','Chicken'),('Egg','Egg'),('Flour','Flour')],validators=[DataRequired('Enter ingredients')])
+
+class recipe_Form(FlaskForm):  
+    name = StringField("Recipe Name",validators=[DataRequired('Enter a recipe_name')])
+    calorie = IntegerField("Calories",validators=[DataRequired('Enter a calories')])
+    servings = IntegerField("Serving",validators=[DataRequired('Enter serving')])
+    prep_time = StringField("Preparation Time",validators=[DataRequired('Enter prep time')])
+    cook_time = StringField("Cook Time",validators=[DataRequired('Enter cook time')])
+    instruction1=StringField('Step 1',validators=[DataRequired('Enter step 1')])
+    instruction2=StringField('Step 2',validators=[DataRequired('Enter step 2')])
+    instruction3=StringField('Step 3',validators=[Optional()])
+    instruction4=StringField('Step 4',validators=[Optional()])    
+    diet_type =SelectField('Diet',choices=[('S','Select Diet'),('Atkins','Atkins'),('Normal','Normal'), ('Vegetarian','Vegetarian'),('Vegan','Vegan')],validators=[DataRequired('Enter preferred diet')])
+    photo = FileField('files[]', validators=[FileRequired(),FileAllowed(ALLOWED_EXTENSIONS, 'File not allowed')])
+    cursor = mysql.cursor()
+    cursor.execute("SELECT * FROM Ingredients")
+    result = cursor.fetchall()
+    choices = [('S','Select ingredients')]
+    for row in result:
+        choices.append((str(int(row[0])), row[1]))
+    ingredients =SelectMultipleField('Ingredients',choices=choices,validators=[DataRequired('Enter ingredients')])
+    
