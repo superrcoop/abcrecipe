@@ -5,8 +5,8 @@ import MySQLdb
 
 
 HOST = 'localhost'
-USER = 'root'
-PASSWORD = ''
+USER = 'rogue'
+PASSWORD = 'password'
 DATABASE='abcrecipe'
 
 UPLOAD_FOLDER = './app/static/uploads'
@@ -14,7 +14,7 @@ UPLOAD_FOLDER = './app/static/uploads'
 app = Flask(__name__)
 app.config['SECRET_KEY'] 						= 'H@1lrAstAf@r1'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] 	= True
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:@localhost/"+DATABASE
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://rogue:password@localhost/"+DATABASE
 app.config['UPLOAD_FOLDER'] = "./app/static/uploads"
 app.config['ALLOWED_UPLOADS'] = set(['jpg','png','jpeg'])
 

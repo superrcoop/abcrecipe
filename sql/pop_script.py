@@ -5,23 +5,23 @@ from random import randint, choice
 
 ingredients_count = 4 #This is the number of ingredients in each recipe
 instructions_count = 4 #This is the number of instructions in each recipe
-num_users = 100000 #This is the number of users. I used this in meal_plan and contructs
-num_meal_plans = 4 * num_users #This is the number of meal plans for each user
+num_users = 10 #This is the number of users. I used this in meal_plan and contructs
+num_meal_plans = num_users//2 #This is the number of meal plans for each user
 
 def generate_db():
     create_db()
     create_user()
     create_profile()
+    create_ingredients()
+    create_uploads()
+    create_instructions()
     create_recipe()
     #create_nutrition()
-    create_ingredients()
-    create_kitchen()
     create_meal()
     create_meal_plan()
     create_measurements()
-    create_instructions()
     #create_address()
-    create_uploads()
+    create_kitchen()
     create_contains()
     create_stores()
     create_creates()
@@ -32,17 +32,17 @@ def generate_db():
     create_consists()
     #create_provide()
     insert_user()
+    insert_measurements()
     insert_profile()
-    insert_recipe()
-    #insert_nutrition()
     insert_ingredients()
+    insert_recipe()
+    insert_uploads()
+    #insert_nutrition()
     insert_kitchen()
     insert_meals()
     insert_meal_plan()
-    insert_measurements()
     insert_instructions()
     #insert_address()
-    insert_uploads()
     insert_contains()
     insert_stores()
     insert_creates()
@@ -277,7 +277,7 @@ def insert_instructions():
         file.write(sql_line)
         file.close()
     else:
-        file = open("schema.sql","w")
+        file = open("schema.sql","a")
         sql_line = "insert into Instructions(recipe_id, task, instruction_order) values"
         for count in range(0,recipe_num-1):
             num = randint(2,4)
@@ -442,7 +442,7 @@ def insert_user():
 def insert_profile():
     user_path = Path("user.txt")
     email_provide = ["@hotmail.com","@yahoo.com","@gmail.com","@outlook.com"] #You can add more if you like
-    health = get_data("heath_info.txt")
+    health = get_data("health_info.txt")
     if user_path.is_file():
         user_file = open("user.txt","r")
         file_path = Path("schema.sql")
